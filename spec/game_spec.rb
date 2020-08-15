@@ -2,7 +2,7 @@
 
 # rubocop:disable Metrics/BlockLength
 
-require_relative '../lib/connect_four.rb'
+require_relative '../lib/game.rb'
 
 RSpec.describe Game do
 
