@@ -16,6 +16,10 @@ class Board
     @board[column][row_to_use(column)] = token
   end
 
+  def row_status
+    row_win? ? :win : :no_win_yet
+  end
+
   private
 
   def row_to_use(column)
@@ -26,5 +30,20 @@ class Board
       row += 1
     end
     :error
+  end
+
+  def row_win?
+    @board.each_with_index do |column, column_index|
+      column.each_index do |row_index|
+        if column_index <= 3 && @board[column_index][row_index] != '-'
+          if @board[column_index][row_index] == @board[column_index + 1][row_index] &&
+            @board[column_index][row_index] == @board[column_index + 2][row_index] &&
+            @board[column_index][row_index] == @board[column_index + 3][row_index]
+            return true
+          end
+        end
+      end
+    end
+    false
   end
 end

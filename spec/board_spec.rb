@@ -82,6 +82,57 @@ RSpec.describe Board do
       end
     end
   end
+
+  describe '#row_status' do
+    context 'when there are four in a row along the bottom from columns 1 to 4' do
+      it 'returns :win' do
+        board.instance_variable_get(:@board)[0][0] = 'r'
+        board.instance_variable_get(:@board)[1][0] = 'r'
+        board.instance_variable_get(:@board)[2][0] = 'r'
+        board.instance_variable_get(:@board)[3][0] = 'r'
+        expect(board.row_status).to eq(:win)
+      end
+    end
+
+    context 'when there are four in a row unrealistically "floating" along the top from columns 4 to 7' do
+      it 'returns :win' do
+        board.instance_variable_get(:@board)[3][5] = 'r'
+        board.instance_variable_get(:@board)[4][5] = 'r'
+        board.instance_variable_get(:@board)[5][5] = 'r'
+        board.instance_variable_get(:@board)[6][5] = 'r'
+        expect(board.row_status).to eq(:win)
+      end
+    end
+
+    context 'when there only two in a row along the bottom in columns 2 and 3' do
+      it 'returns :no_win_yet' do
+        board.instance_variable_get(:@board)[0][0] = 'y'
+        board.instance_variable_get(:@board)[1][0] = 'r'
+        board.instance_variable_get(:@board)[2][0] = 'r'
+        expect(board.row_status).to eq(:no_win_yet)
+      end
+    end
+
+    context 'when there are only three in a row along the bottom in columns 5 through 7' do
+      it 'returns :no_win_yet' do
+        board.instance_variable_get(:@board)[0][0] = 'y'
+        board.instance_variable_get(:@board)[1][0] = 'y'
+        board.instance_variable_get(:@board)[4][0] = 'r'
+        board.instance_variable_get(:@board)[5][0] = 'r'
+        board.instance_variable_get(:@board)[6][0] = 'r'
+        expect(board.row_status).to eq(:no_win_yet)
+      end
+    end
+
+    context 'when there are no four-in-a-row situations on the board' do
+      it 'returns :no_win_yet' do
+        board.instance_variable_get(:@board)[0][0] = 'r'
+        board.instance_variable_get(:@board)[1][0] = 'y'
+        board.instance_variable_get(:@board)[2][0] = 'r'
+        expect(board.row_status).to eq(:no_win_yet)
+      end
+    end
+  end
 end
 
 # rubocop:enable Metrics/BlockLength
