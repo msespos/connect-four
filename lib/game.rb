@@ -2,14 +2,13 @@
 
 # gameplay class
 class Game
-
   def game_over?(outcome)
     if outcome == :yellow
-      "Yellow wins!"
+      'Yellow wins!'
     elsif outcome == :red
-      "Red wins!"
+      'Red wins!'
     else
-      "It\'s a draw!"
+      'It\'s a draw!'
     end
   end
 

@@ -11,10 +11,9 @@ class Board
   end
 
   def drop_token(token, column)
-    if row_to_use(column) == :error
-      return :error
-    end
-    @board[column - 1][row_to_use(column)] = token
+    return :error if row_to_use(column) == :error
+
+    @board[column][row_to_use(column)] = token
   end
 
   private
@@ -22,9 +21,8 @@ class Board
   def row_to_use(column)
     row = 0
     while row < 6
-      if @board[column - 1][row] == '-'
-        return row
-      end
+      return row if @board[column][row] == '-'
+
       row += 1
     end
     :error
