@@ -11,15 +11,22 @@ class Board
   end
 
   def drop_token(token, column)
-    
-    if @board[column - 1][0] == '-'
-      @board[column  - 1][0] = token
-    elsif @board[column - 1][0] != '-' && @board[column - 1][1] == '-'
-      @board[column - 1][1] = token
-    elsif @board[column - 1][0] != '-' && @board[column - 1][1] != '-' && @board[column - 1][2] == '-'
-      @board[column - 1][2] = token
-    elsif @board[column - 1][0] != '-' && @board[column - 1][1] != '-' && @board[column - 1][2] != '-' && @board[column - 1][3] == '-'
-      @board[column - 1][3] = token
+    if row_to_use(column) == :error
+      return :error
     end
+    @board[column - 1][row_to_use(column)] = token
+  end
+
+  private
+
+  def row_to_use(column)
+    row = 0
+    while row < 6
+      if @board[column - 1][row] == '-'
+        return row
+      end
+      row += 1
+    end
+    :error
   end
 end

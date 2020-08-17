@@ -28,14 +28,14 @@ RSpec.describe Board do
   
   describe '#drop_token' do
     context 'when the board is empty and a token is dropped in the first column' do
-      it 'the token lands at the bottom of the first column' do
+      it 'lands at the bottom of the first column' do
         board.drop_token('r', 1)
         expect(board.instance_variable_get(:@board)[0][0]).to eq('r')
       end
     end
 
     context 'when the bottom left spot is full and a token is dropped in the first column' do
-      it 'the token lands at the second from the bottom spot of the first column' do
+      it 'lands at the second from the bottom spot of the first column' do
         board.instance_variable_get(:@board)[0][0] = 'r'
         board.drop_token('y', 1)
         expect(board.instance_variable_get(:@board)[0][1]).to eq('y')
@@ -43,7 +43,7 @@ RSpec.describe Board do
     end
 
     context 'when the bottom left spot is full and a token is dropped in the second column' do
-      it 'the token lands at the bottom spot of the second column' do
+      it 'lands at the bottom spot of the second column' do
         board.instance_variable_get(:@board)[0][0] = 'r'
         board.drop_token('y', 2)
         expect(board.instance_variable_get(:@board)[1][0]).to eq('y')
@@ -51,7 +51,7 @@ RSpec.describe Board do
     end
 
     context 'when the bottom two spots of the first column are full and a token is dropped in the first column' do
-      it 'the token lands at the third from the bottom spot of the first column' do
+      it 'lands at the third from the bottom spot of the first column' do
         board.instance_variable_get(:@board)[0][0] = 'r'
         board.instance_variable_get(:@board)[0][1] = 'y'
         board.drop_token('r', 1)
@@ -60,12 +60,24 @@ RSpec.describe Board do
     end
 
     context 'when the bottom three spots of the first column are full and a token is dropped in the first column' do
-      it 'the token lands at the fourth from the bottom spot of the first column' do
+      it 'lands at the fourth from the bottom spot of the first column' do
         board.instance_variable_get(:@board)[0][0] = 'r'
         board.instance_variable_get(:@board)[0][1] = 'y'
         board.instance_variable_get(:@board)[0][2] = 'r'
         board.drop_token('y', 1)
         expect(board.instance_variable_get(:@board)[0][3]).to eq('y')
+      end
+    end
+
+    context 'when the entire first column is full and a token is dropped in the first column' do
+      it 'returns an error message' do
+        board.instance_variable_get(:@board)[0][0] = 'r'
+        board.instance_variable_get(:@board)[0][1] = 'y'
+        board.instance_variable_get(:@board)[0][2] = 'r'
+        board.instance_variable_get(:@board)[0][3] = 'y'
+        board.instance_variable_get(:@board)[0][4] = 'r'
+        board.instance_variable_get(:@board)[0][5] = 'y'
+        expect(board.drop_token('r', 1)).to eq(:error)
       end
     end
   end
