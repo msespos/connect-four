@@ -35,15 +35,19 @@ class Board
   def row_win?
     @board.each_with_index do |column, column_index|
       column.each_index do |row_index|
-        if column_index <= 3 && @board[column_index][row_index] != '-'
-          if @board[column_index][row_index] == @board[column_index + 1][row_index] &&
-            @board[column_index][row_index] == @board[column_index + 2][row_index] &&
-            @board[column_index][row_index] == @board[column_index + 3][row_index]
-            return true
-          end
-        end
+        next if column_index > 3 || @board[column_index][row_index] == '-'
+
+        return true if four_consecutive_in_row?(column_index, row_index)
       end
     end
     false
+  end
+
+  def four_consecutive_in_row?(column_index, row_index)
+    first_spot = @board[column_index][row_index]
+    second_spot = @board[column_index + 1][row_index]
+    third_spot = @board[column_index + 2][row_index]
+    fourth_spot = @board[column_index + 3][row_index]
+    first_spot == second_spot && first_spot == third_spot && first_spot == fourth_spot
   end
 end
