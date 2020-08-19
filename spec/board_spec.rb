@@ -94,7 +94,7 @@ RSpec.describe Board do
       end
     end
 
-    context 'when there are four in a row unrealistically "floating" along the top from columns 4 to 7' do
+    context 'when there are four in a row placed along the top from columns 4 to 7' do
       it 'returns :win' do
         board.instance_variable_get(:@board)[3][5] = 'r'
         board.instance_variable_get(:@board)[4][5] = 'r'
@@ -120,15 +120,6 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[4][0] = 'r'
         board.instance_variable_get(:@board)[5][0] = 'r'
         board.instance_variable_get(:@board)[6][0] = 'r'
-        expect(board.row_status).to eq(:no_win_yet)
-      end
-    end
-
-    context 'when there are no four-in-a-row situations on the board' do
-      it 'returns :no_win_yet' do
-        board.instance_variable_get(:@board)[0][0] = 'r'
-        board.instance_variable_get(:@board)[1][0] = 'y'
-        board.instance_variable_get(:@board)[2][0] = 'r'
         expect(board.row_status).to eq(:no_win_yet)
       end
     end
@@ -170,7 +161,7 @@ RSpec.describe Board do
       end
     end
 
-    context 'when there are only three in a column unrealistically placed along the left side in rows 5 through 7' do
+    context 'when there are only three in a column placed along the left side in rows 5 through 7' do
       it 'returns :no_win_yet' do
         board.instance_variable_get(:@board)[1][0] = 'y'
         board.instance_variable_get(:@board)[2][0] = 'y'
@@ -181,13 +172,88 @@ RSpec.describe Board do
         expect(board.column_status).to eq(:no_win_yet)
       end
     end
+  end
 
-    context 'when there are no four-in-a-column situations on the board' do
+  describe '#negative_slope_diagonal_status' do
+    context 'when there are four in a row diagonally from the top left spot' do
+      it 'returns :win' do
+        board.instance_variable_get(:@board)[0][5] = 'r'
+        board.instance_variable_get(:@board)[1][4] = 'r'
+        board.instance_variable_get(:@board)[2][3] = 'r'
+        board.instance_variable_get(:@board)[3][2] = 'r'
+        expect(board.negative_slope_diagonal_status).to eq(:win)
+      end
+    end
+
+    context 'when there are four in a row diagonally from the top spot in the fourth column' do
+      it 'returns :win' do
+        board.instance_variable_get(:@board)[3][5] = 'r'
+        board.instance_variable_get(:@board)[4][4] = 'r'
+        board.instance_variable_get(:@board)[5][3] = 'r'
+        board.instance_variable_get(:@board)[6][2] = 'r'
+        expect(board.negative_slope_diagonal_status).to eq(:win)
+      end
+    end
+
+    context 'when there are four in a row diagonally from the fourth row, fourth column spot' do
+      it 'returns :win' do
+        board.instance_variable_get(:@board)[3][3] = 'r'
+        board.instance_variable_get(:@board)[4][2] = 'r'
+        board.instance_variable_get(:@board)[5][1] = 'r'
+        board.instance_variable_get(:@board)[6][0] = 'r'
+        expect(board.negative_slope_diagonal_status).to eq(:win)
+      end
+    end
+
+    context 'when there are only three in a row diagonally' do
       it 'returns :no_win_yet' do
+        board.instance_variable_get(:@board)[3][5] = 'r'
+        board.instance_variable_get(:@board)[4][4] = 'r'
+        board.instance_variable_get(:@board)[5][3] = 'r'
+        board.instance_variable_get(:@board)[6][1] = 'r'
+        expect(board.negative_slope_diagonal_status).to eq(:no_win_yet)
+      end
+    end
+  end
+
+  describe '#positive_slope_diagonal_status' do
+    context 'when there are four in a row diagonally from the top right spot' do
+      it 'returns :win' do
+        board.instance_variable_get(:@board)[6][5] = 'r'
+        board.instance_variable_get(:@board)[5][4] = 'r'
+        board.instance_variable_get(:@board)[4][3] = 'r'
+        board.instance_variable_get(:@board)[3][2] = 'r'
+        expect(board.positive_slope_diagonal_status).to eq(:win)
+      end
+    end
+
+    context 'when there are four in a row diagonally from the top spot in the fourth column' do
+      it 'returns :win' do
+        board.instance_variable_get(:@board)[3][5] = 'r'
+        board.instance_variable_get(:@board)[2][4] = 'r'
+        board.instance_variable_get(:@board)[1][3] = 'r'
+        board.instance_variable_get(:@board)[0][2] = 'r'
+        expect(board.positive_slope_diagonal_status).to eq(:win)
+      end
+    end
+
+    context 'when there are four in a row diagonally from the fourth row, fourth column spot' do
+      it 'returns :win' do
+        board.instance_variable_get(:@board)[3][3] = 'r'
+        board.instance_variable_get(:@board)[2][2] = 'r'
+        board.instance_variable_get(:@board)[1][1] = 'r'
         board.instance_variable_get(:@board)[0][0] = 'r'
-        board.instance_variable_get(:@board)[1][0] = 'y'
-        board.instance_variable_get(:@board)[2][0] = 'r'
-        expect(board.column_status).to eq(:no_win_yet)
+        expect(board.positive_slope_diagonal_status).to eq(:win)
+      end
+    end
+
+    context 'when there are only three in a row diagonally' do
+      it 'returns :no_win_yet' do
+        board.instance_variable_get(:@board)[3][5] = 'r'
+        board.instance_variable_get(:@board)[4][4] = 'r'
+        board.instance_variable_get(:@board)[5][3] = 'r'
+        board.instance_variable_get(:@board)[6][1] = 'r'
+        expect(board.positive_slope_diagonal_status).to eq(:no_win_yet)
       end
     end
   end

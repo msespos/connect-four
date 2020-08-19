@@ -7,15 +7,19 @@ require_relative '../lib/game.rb'
 RSpec.describe Game do
   subject(:game) { Game.new }
   describe '#game_over?' do
-    context 'when the game is over' do
+    context 'when the game is over with a yellow win' do
       it 'returns "Yellow wins!"' do
         expect(game.game_over?(:yellow)).to eq('Yellow wins!')
       end
+    end
 
+    context 'when the game is over with a red win' do
       it 'returns "Red wins!"' do
         expect(game.game_over?(:red)).to eq('Red wins!')
       end
+    end
 
+    context 'when the game is over with a tie' do
       it 'returns "It\'s a draw!"' do
         expect(game.game_over?(:draw)).to eq('It\'s a draw!')
       end
