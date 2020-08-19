@@ -17,19 +17,19 @@ class Board
   end
 
   def row_status
-    row_win? ? :win : :no_win_yet
+    win?(:row) ? :win : :no_win_yet
   end
 
   def column_status
-    column_win? ? :win : :no_win_yet
+    win?(:column) ? :win : :no_win_yet
   end
 
   def negative_slope_diagonal_status
-    negative_slope_diagonal_win? ? :win : :no_win_yet
+    win?(:negative_slope_diagonal) ? :win : :no_win_yet
   end
 
   def positive_slope_diagonal_status
-    positive_slope_diagonal_win? ? :win : :no_win_yet
+    win?(:positive_slope_diagonal) ? :win : :no_win_yet
   end
 
   private
@@ -44,89 +44,51 @@ class Board
     :error
   end
 
-  def row_win?
+  def win?(win_type)
     @board.each_with_index do |column, column_index|
       column.each_index do |row_index|
-        next if column_index > 3 || @board[column_index][row_index] == '-'
+        case win_type
+        when :row
+          next if column_index > 3 || @board[column_index][row_index] == '-'
+        when :column
+          next if row_index > 2 || @board[column_index][row_index] == '-'
+        when :negative_slope_diagonal
+          next if row_index < 3 || column_index > 3 || @board[column_index][row_index] == '-'
+        when :positive_slope_diagonal
+          next if row_index < 3 || column_index < 3 || @board[column_index][row_index] == '-'
+        end
 
-        return true if four_consecutive_in_row?(column_index, row_index)
+        return true if four_consecutive?(column_index, row_index, win_type)
       end
     end
     false
   end
 
-  def four_consecutive_in_row?(column_index, row_index)
-    first_spot = @board[column_index][row_index]
-    second_spot = @board[column_index + 1][row_index]
-    third_spot = @board[column_index + 2][row_index]
-    fourth_spot = @board[column_index + 3][row_index]
+  def four_consecutive?(column_index, row_index, win_type)
+    first_spot, second_spot, third_spot, fourth_spot = win_spots(column_index, row_index, win_type)
     first_spot == second_spot && first_spot == third_spot && first_spot == fourth_spot
   end
 
-  def column_win?
-    @board.each_with_index do |column, column_index|
-      column.each_index do |row_index|
-        next if row_index > 2 || @board[column_index][row_index] == '-'
-
-        return true if four_consecutive_in_column?(column_index, row_index)
-      end
-    end
-    false
-  end
-
-  def four_consecutive_in_column?(column_index, row_index)
+  def win_spots(column_index, row_index, win_type)
     first_spot = @board[column_index][row_index]
-    second_spot = @board[column_index][row_index + 1]
-    third_spot = @board[column_index][row_index + 2]
-    fourth_spot = @board[column_index][row_index + 3]
-    first_spot == second_spot && first_spot == third_spot && first_spot == fourth_spot
-  end
-
-  def negative_slope_diagonal_win?
-    @board.each_with_index do |column, column_index|
-      column.each_index do |row_index|
-        next if row_index < 3 || column_index > 3 || @board[column_index][row_index] == '-'
-
-        return true if four_consecutive_in_negative_slope_diagonal?(column_index, row_index)
-      end
+    case win_type
+    when :row
+      second_spot = @board[column_index + 1][row_index]
+      third_spot = @board[column_index + 2][row_index]
+      fourth_spot = @board[column_index + 3][row_index]
+    when :column
+      second_spot = @board[column_index][row_index + 1]
+      third_spot = @board[column_index][row_index + 2]
+      fourth_spot = @board[column_index][row_index + 3]
+    when :negative_slope_diagonal
+      second_spot = @board[column_index + 1][row_index - 1]
+      third_spot = @board[column_index + 2][row_index - 2]
+      fourth_spot = @board[column_index + 3][row_index - 3]
+    when :positive_slope_diagonal
+      second_spot = @board[column_index - 1][row_index - 1]
+      third_spot = @board[column_index - 2][row_index - 2]
+      fourth_spot = @board[column_index - 3][row_index - 3]
     end
-    false
-  end
-
-  def negative_slope_diagonal_spots(column_index, row_index)
-    first_spot = @board[column_index][row_index]
-    second_spot = @board[column_index + 1][row_index - 1]
-    third_spot = @board[column_index + 2][row_index - 2]
-    fourth_spot = @board[column_index + 3][row_index - 3]
     [first_spot, second_spot, third_spot, fourth_spot]
-  end
-
-  def four_consecutive_in_negative_slope_diagonal?(column_index, row_index)
-    first_spot, second_spot, third_spot, fourth_spot = negative_slope_diagonal_spots(column_index, row_index)
-    first_spot == second_spot && first_spot == third_spot && first_spot == fourth_spot
-  end
-
-  def positive_slope_diagonal_win?
-    @board.each_with_index do |column, column_index|
-      column.each_index do |row_index|
-        next if row_index < 3 || column_index < 3 || @board[column_index][row_index] == '-'
-
-        return true if four_consecutive_in_positive_slope_diagonal?(column_index, row_index)
-      end
-    end
-    false
-  end
-
-  def positive_slope_diagonal_spots(column_index, row_index)
-    first_spot = @board[column_index][row_index]
-    second_spot = @board[column_index - 1][row_index - 1]
-    third_spot = @board[column_index - 2][row_index - 2]
-    fourth_spot = @board[column_index - 3][row_index - 3]
-    [first_spot, second_spot, third_spot, fourth_spot]
-  end
-
-  def four_consecutive_in_positive_slope_diagonal?(column_index, row_index)
-    first_spot, second_spot, third_spot, fourth_spot = positive_slope_diagonal_spots(column_index, row_index)
-    first_spot == second_spot && first_spot == third_spot && first_spot == fourth_spot
   end
 end
