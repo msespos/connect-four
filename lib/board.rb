@@ -20,6 +20,10 @@ class Board
     row_win? ? :win : :no_win_yet
   end
 
+  def column_status
+    column_win? ? :win : :no_win_yet
+  end
+
   private
 
   def row_to_use(column)
@@ -48,6 +52,25 @@ class Board
     second_spot = @board[column_index + 1][row_index]
     third_spot = @board[column_index + 2][row_index]
     fourth_spot = @board[column_index + 3][row_index]
+    first_spot == second_spot && first_spot == third_spot && first_spot == fourth_spot
+  end
+
+  def column_win?
+    @board.each_with_index do |column, column_index|
+      column.each_index do |row_index|
+        next if row_index > 2 || @board[column_index][row_index] == '-'
+
+        return true if four_consecutive_in_column?(column_index, row_index)
+      end
+    end
+    false
+  end
+
+  def four_consecutive_in_column?(column_index, row_index)
+    first_spot = @board[column_index][row_index]
+    second_spot = @board[column_index][row_index + 1]
+    third_spot = @board[column_index][row_index + 2]
+    fourth_spot = @board[column_index][row_index + 3]
     first_spot == second_spot && first_spot == third_spot && first_spot == fourth_spot
   end
 end

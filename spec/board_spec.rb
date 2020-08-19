@@ -133,6 +133,64 @@ RSpec.describe Board do
       end
     end
   end
+
+  describe '#column_status' do
+    context 'when there are four in a column along the left from rows 1 to 4' do
+      it 'returns :win' do
+        board.instance_variable_get(:@board)[0][0] = 'r'
+        board.instance_variable_get(:@board)[0][1] = 'r'
+        board.instance_variable_get(:@board)[0][2] = 'r'
+        board.instance_variable_get(:@board)[0][3] = 'r'
+        board.instance_variable_get(:@board)[1][0] = 'y'
+        board.instance_variable_get(:@board)[1][1] = 'y'
+        board.instance_variable_get(:@board)[1][2] = 'y'
+        expect(board.column_status).to eq(:win)
+      end
+    end
+
+    context 'when there are four in a column unrealistically placed from rows 4 to 7' do
+      it 'returns :win' do
+        board.instance_variable_get(:@board)[5][0] = 'r'
+        board.instance_variable_get(:@board)[5][1] = 'y'
+        board.instance_variable_get(:@board)[5][2] = 'r'
+        board.instance_variable_get(:@board)[5][3] = 'r'
+        board.instance_variable_get(:@board)[5][4] = 'r'
+        board.instance_variable_get(:@board)[5][5] = 'r'
+        expect(board.column_status).to eq(:win)
+      end
+    end
+
+    context 'when there only two in a column along the left side in rows 2 and 3' do
+      it 'returns :no_win_yet' do
+        board.instance_variable_get(:@board)[0][0] = 'y'
+        board.instance_variable_get(:@board)[1][0] = 'y'
+        board.instance_variable_get(:@board)[0][1] = 'r'
+        board.instance_variable_get(:@board)[0][2] = 'r'
+        expect(board.column_status).to eq(:no_win_yet)
+      end
+    end
+
+    context 'when there are only three in a column unrealistically placed along the left side in rows 5 through 7' do
+      it 'returns :no_win_yet' do
+        board.instance_variable_get(:@board)[1][0] = 'y'
+        board.instance_variable_get(:@board)[2][0] = 'y'
+        board.instance_variable_get(:@board)[3][0] = 'y'
+        board.instance_variable_get(:@board)[4][0] = 'r'
+        board.instance_variable_get(:@board)[5][0] = 'r'
+        board.instance_variable_get(:@board)[6][0] = 'r'
+        expect(board.column_status).to eq(:no_win_yet)
+      end
+    end
+
+    context 'when there are no four-in-a-column situations on the board' do
+      it 'returns :no_win_yet' do
+        board.instance_variable_get(:@board)[0][0] = 'r'
+        board.instance_variable_get(:@board)[1][0] = 'y'
+        board.instance_variable_get(:@board)[2][0] = 'r'
+        expect(board.column_status).to eq(:no_win_yet)
+      end
+    end
+  end
 end
 
 # rubocop:enable Metrics/BlockLength
