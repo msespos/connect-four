@@ -16,27 +16,15 @@ class Board
     @board[column][row_to_use(column)] = token
   end
 
-  def win_status
-    row_status ||
-      column_status ||
-      negative_slope_diagonal_status ||
-      positive_slope_diagonal_status
-  end
-
-  def row_status
-    win?(:row) ? :win : :no_win_yet
-  end
-
-  def column_status
-    win?(:column) ? :win : :no_win_yet
-  end
-
-  def negative_slope_diagonal_status
-    win?(:negative_slope_diagonal) ? :win : :no_win_yet
-  end
-
-  def positive_slope_diagonal_status
-    win?(:positive_slope_diagonal) ? :win : :no_win_yet
+  def board_status
+    if win?(:row) ||
+       win?(:column) ||
+       win?(:negative_slope_diagonal) ||
+       win?(:positive_slope_diagonal)
+      :win
+    else
+      :no_win_yet
+    end
   end
 
   private
@@ -77,6 +65,15 @@ class Board
     first_spot == second_spot && first_spot == third_spot && first_spot == fourth_spot
   end
 
+  def win_spots(column_index, row_index, win_type)
+    column_shift, row_shift = shifts(win_type)
+    first_spot = @board[column_index][row_index]
+    second_spot = @board[column_index + column_shift][row_index + row_shift]
+    third_spot = @board[column_index + column_shift * 2][row_index + row_shift * 2]
+    fourth_spot = @board[column_index + column_shift * 3][row_index + row_shift * 3]
+    [first_spot, second_spot, third_spot, fourth_spot]
+  end
+
   def shifts(win_type)
     case win_type
     when :row
@@ -93,14 +90,5 @@ class Board
       row_shift = -1
     end
     [column_shift, row_shift]
-  end
-
-  def win_spots(column_index, row_index, win_type)
-    column_shift, row_shift = shifts(win_type)
-    first_spot = @board[column_index][row_index]
-    second_spot = @board[column_index + column_shift][row_index + row_shift]
-    third_spot = @board[column_index + column_shift * 2][row_index + row_shift * 2]
-    fourth_spot = @board[column_index + column_shift * 3][row_index + row_shift * 3]
-    [first_spot, second_spot, third_spot, fourth_spot]
   end
 end

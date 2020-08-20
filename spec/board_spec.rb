@@ -83,14 +83,14 @@ RSpec.describe Board do
     end
   end
 
-  describe '#row_status' do
+  describe '#board_status' do
     context 'when there are four in a row along the bottom from columns 1 to 4' do
       it 'returns :win' do
         board.instance_variable_get(:@board)[0][0] = 'r'
         board.instance_variable_get(:@board)[1][0] = 'r'
         board.instance_variable_get(:@board)[2][0] = 'r'
         board.instance_variable_get(:@board)[3][0] = 'r'
-        expect(board.row_status).to eq(:win)
+        expect(board.board_status).to eq(:win)
       end
     end
 
@@ -100,7 +100,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[4][5] = 'r'
         board.instance_variable_get(:@board)[5][5] = 'r'
         board.instance_variable_get(:@board)[6][5] = 'r'
-        expect(board.row_status).to eq(:win)
+        expect(board.board_status).to eq(:win)
       end
     end
 
@@ -109,7 +109,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[0][0] = 'y'
         board.instance_variable_get(:@board)[1][0] = 'r'
         board.instance_variable_get(:@board)[2][0] = 'r'
-        expect(board.row_status).to eq(:no_win_yet)
+        expect(board.board_status).to eq(:no_win_yet)
       end
     end
 
@@ -120,12 +120,10 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[4][0] = 'r'
         board.instance_variable_get(:@board)[5][0] = 'r'
         board.instance_variable_get(:@board)[6][0] = 'r'
-        expect(board.row_status).to eq(:no_win_yet)
+        expect(board.board_status).to eq(:no_win_yet)
       end
     end
-  end
 
-  describe '#column_status' do
     context 'when there are four in a column along the left from rows 1 to 4' do
       it 'returns :win' do
         board.instance_variable_get(:@board)[0][0] = 'r'
@@ -135,7 +133,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[1][0] = 'y'
         board.instance_variable_get(:@board)[1][1] = 'y'
         board.instance_variable_get(:@board)[1][2] = 'y'
-        expect(board.column_status).to eq(:win)
+        expect(board.board_status).to eq(:win)
       end
     end
 
@@ -147,7 +145,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[5][3] = 'r'
         board.instance_variable_get(:@board)[5][4] = 'r'
         board.instance_variable_get(:@board)[5][5] = 'r'
-        expect(board.column_status).to eq(:win)
+        expect(board.board_status).to eq(:win)
       end
     end
 
@@ -157,7 +155,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[1][0] = 'y'
         board.instance_variable_get(:@board)[0][1] = 'r'
         board.instance_variable_get(:@board)[0][2] = 'r'
-        expect(board.column_status).to eq(:no_win_yet)
+        expect(board.board_status).to eq(:no_win_yet)
       end
     end
 
@@ -169,19 +167,17 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[4][0] = 'r'
         board.instance_variable_get(:@board)[5][0] = 'r'
         board.instance_variable_get(:@board)[6][0] = 'r'
-        expect(board.column_status).to eq(:no_win_yet)
+        expect(board.board_status).to eq(:no_win_yet)
       end
     end
-  end
 
-  describe '#negative_slope_diagonal_status' do
     context 'when there are four in a row diagonally from the top left spot' do
       it 'returns :win' do
         board.instance_variable_get(:@board)[0][5] = 'r'
         board.instance_variable_get(:@board)[1][4] = 'r'
         board.instance_variable_get(:@board)[2][3] = 'r'
         board.instance_variable_get(:@board)[3][2] = 'r'
-        expect(board.negative_slope_diagonal_status).to eq(:win)
+        expect(board.board_status).to eq(:win)
       end
     end
 
@@ -191,7 +187,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[4][4] = 'r'
         board.instance_variable_get(:@board)[5][3] = 'r'
         board.instance_variable_get(:@board)[6][2] = 'r'
-        expect(board.negative_slope_diagonal_status).to eq(:win)
+        expect(board.board_status).to eq(:win)
       end
     end
 
@@ -201,7 +197,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[4][2] = 'r'
         board.instance_variable_get(:@board)[5][1] = 'r'
         board.instance_variable_get(:@board)[6][0] = 'r'
-        expect(board.negative_slope_diagonal_status).to eq(:win)
+        expect(board.board_status).to eq(:win)
       end
     end
 
@@ -211,19 +207,17 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[4][4] = 'r'
         board.instance_variable_get(:@board)[5][3] = 'r'
         board.instance_variable_get(:@board)[6][1] = 'r'
-        expect(board.negative_slope_diagonal_status).to eq(:no_win_yet)
+        expect(board.board_status).to eq(:no_win_yet)
       end
     end
-  end
 
-  describe '#positive_slope_diagonal_status' do
     context 'when there are four in a row diagonally from the top right spot' do
       it 'returns :win' do
         board.instance_variable_get(:@board)[6][5] = 'r'
         board.instance_variable_get(:@board)[5][4] = 'r'
         board.instance_variable_get(:@board)[4][3] = 'r'
         board.instance_variable_get(:@board)[3][2] = 'r'
-        expect(board.positive_slope_diagonal_status).to eq(:win)
+        expect(board.board_status).to eq(:win)
       end
     end
 
@@ -233,7 +227,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[2][4] = 'r'
         board.instance_variable_get(:@board)[1][3] = 'r'
         board.instance_variable_get(:@board)[0][2] = 'r'
-        expect(board.positive_slope_diagonal_status).to eq(:win)
+        expect(board.board_status).to eq(:win)
       end
     end
 
@@ -243,7 +237,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[2][2] = 'r'
         board.instance_variable_get(:@board)[1][1] = 'r'
         board.instance_variable_get(:@board)[0][0] = 'r'
-        expect(board.positive_slope_diagonal_status).to eq(:win)
+        expect(board.board_status).to eq(:win)
       end
     end
 
@@ -253,7 +247,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[4][4] = 'r'
         board.instance_variable_get(:@board)[5][3] = 'r'
         board.instance_variable_get(:@board)[6][1] = 'r'
-        expect(board.positive_slope_diagonal_status).to eq(:no_win_yet)
+        expect(board.board_status).to eq(:no_win_yet)
       end
     end
   end
