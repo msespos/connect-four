@@ -2,7 +2,7 @@
 
 # gameplay class
 class Game
-  def game_over?(outcome)
+  def end_of_game_output(outcome)
     if outcome == :yellow
       'Yellow wins!'
     elsif outcome == :red
@@ -10,6 +10,10 @@ class Game
     else
       'It\'s a draw!'
     end
+  end
+
+  def game_over?
+    @red == 4 || @yellow == 4 || @turns == 42
   end
 
   def outcome

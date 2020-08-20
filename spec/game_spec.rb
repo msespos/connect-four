@@ -6,22 +6,22 @@ require_relative '../lib/game.rb'
 
 RSpec.describe Game do
   subject(:game) { Game.new }
-  describe '#game_over?' do
+  describe '#end_of_game_output' do
     context 'when the game is over with a yellow win' do
       it 'returns "Yellow wins!"' do
-        expect(game.game_over?(:yellow)).to eq('Yellow wins!')
+        expect(game.end_of_game_output(:yellow)).to eq('Yellow wins!')
       end
     end
 
     context 'when the game is over with a red win' do
       it 'returns "Red wins!"' do
-        expect(game.game_over?(:red)).to eq('Red wins!')
+        expect(game.end_of_game_output(:red)).to eq('Red wins!')
       end
     end
 
     context 'when the game is over with a tie' do
       it 'returns "It\'s a draw!"' do
-        expect(game.game_over?(:draw)).to eq('It\'s a draw!')
+        expect(game.end_of_game_output(:draw)).to eq('It\'s a draw!')
       end
     end
   end
@@ -43,6 +43,32 @@ RSpec.describe Game do
         game.instance_variable_set(:@yellow, 3)
         game.instance_variable_set(:@turns, 42)
         expect(game.outcome).to eq(:draw)
+      end
+    end
+  end
+
+  describe '#game_over?' do
+    context 'when checking if the game is over' do
+      it 'returns true if there are four reds in a row' do
+        game.instance_variable_set(:@red, 4)
+        expect(game.game_over?).to eq(true)
+      end
+
+      it 'returns true if there are four yellows in a row' do
+        game.instance_variable_set(:@yellow, 4)
+        expect(game.game_over?).to eq(true)
+      end
+
+      it 'returns true if the board is full' do
+        game.instance_variable_set(:@turns, 42)
+        expect(game.game_over?).to eq(true)
+      end
+
+      it 'returns if none of the conditions are true' do
+        game.instance_variable_set(:@red, 3)
+        game.instance_variable_set(:@yellow, 3)
+        game.instance_variable_set(:@turns, 41)
+        expect(game.game_over?).to eq(false)
       end
     end
   end

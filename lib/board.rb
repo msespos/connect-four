@@ -6,29 +6,31 @@ class Board
     board
   end
 
+  # build a blank board
   def board
     @board = Array.new(7) { Array.new(6) { '-' } }
   end
 
+  # drop a token into one of the columns on the board, assuming a slot is available
   def drop_token(token, column)
     return :error if row_to_use(column) == :error
 
     @board[column][row_to_use(column)] = token
   end
 
+  # determine if the board is in a red win, yellow win, or no win yet state
   def board_status
-    if win?(:row) ||
-       win?(:column) ||
-       win?(:negative_slope_diagonal) ||
-       win?(:positive_slope_diagonal)
-      :win
-    else
-      :no_win_yet
+    win_types = %i[row column negative_slope_diagonal positive_slope_diagonal]
+    win_types.each do |win_type|
+      return winner_or_none(win_type) if winner_or_none(win_type) != :no_winner_yet
     end
+    :no_win_yet
   end
 
   private
 
+  # used by #drop_token to determine which row, if any, should be used to place a
+  # token given a column - returns an error message if the column is full already
   def row_to_use(column)
     row = 0
     while row < 6
@@ -39,7 +41,8 @@ class Board
     :error
   end
 
-  def win?(win_type)
+  # used by #board_status; determines the winner if there is a winner at this point in the game
+  def winner_or_none(win_type)
     @board.each_with_index do |column, column_index|
       column.each_index do |row_index|
         next if @board[column_index][row_index] == '-'
@@ -54,17 +57,26 @@ class Board
         when :positive_slope_diagonal
           next if row_index < 3 || column_index < 3
         end
-        return true if four_consecutive?(column_index, row_index, win_type)
+        return symbol(@board[column_index][row_index]) if four_consecutive?(column_index, row_index, win_type)
       end
     end
-    false
+    :no_winner_yet
   end
 
+  # used by #winner_or_none; converts a string on the board into a symbol
+  def symbol(string)
+    string == 'r' ? :red : :yellow
+  end
+
+  # used by #winner_or_none; checks four spots given an initial spot to see if they are
+  # consecutive of one color
   def four_consecutive?(column_index, row_index, win_type)
     first_spot, second_spot, third_spot, fourth_spot = win_spots(column_index, row_index, win_type)
     first_spot == second_spot && first_spot == third_spot && first_spot == fourth_spot
   end
 
+  # used by #four_consecutive?; creates the four spots to be checked using column and row
+  # shifts as appropriate to the type of win
   def win_spots(column_index, row_index, win_type)
     column_shift, row_shift = shifts(win_type)
     first_spot = @board[column_index][row_index]
@@ -74,6 +86,7 @@ class Board
     [first_spot, second_spot, third_spot, fourth_spot]
   end
 
+  # used by #win_spots; generates the appropriate column and row shifts according to win_type
   def shifts(win_type)
     case win_type
     when :row

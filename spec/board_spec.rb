@@ -84,23 +84,23 @@ RSpec.describe Board do
   end
 
   describe '#board_status' do
-    context 'when there are four in a row along the bottom from columns 1 to 4' do
-      it 'returns :win' do
+    context 'when there are four red in a row along the bottom from columns 1 to 4' do
+      it 'returns :red' do
         board.instance_variable_get(:@board)[0][0] = 'r'
         board.instance_variable_get(:@board)[1][0] = 'r'
         board.instance_variable_get(:@board)[2][0] = 'r'
         board.instance_variable_get(:@board)[3][0] = 'r'
-        expect(board.board_status).to eq(:win)
+        expect(board.board_status).to eq(:red)
       end
     end
 
-    context 'when there are four in a row placed along the top from columns 4 to 7' do
-      it 'returns :win' do
+    context 'when there are four red in a row placed along the top from columns 4 to 7' do
+      it 'returns :red' do
         board.instance_variable_get(:@board)[3][5] = 'r'
         board.instance_variable_get(:@board)[4][5] = 'r'
         board.instance_variable_get(:@board)[5][5] = 'r'
         board.instance_variable_get(:@board)[6][5] = 'r'
-        expect(board.board_status).to eq(:win)
+        expect(board.board_status).to eq(:red)
       end
     end
 
@@ -124,8 +124,8 @@ RSpec.describe Board do
       end
     end
 
-    context 'when there are four in a column along the left from rows 1 to 4' do
-      it 'returns :win' do
+    context 'when there are four red in a column along the left from rows 1 to 4' do
+      it 'returns :red' do
         board.instance_variable_get(:@board)[0][0] = 'r'
         board.instance_variable_get(:@board)[0][1] = 'r'
         board.instance_variable_get(:@board)[0][2] = 'r'
@@ -133,19 +133,19 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[1][0] = 'y'
         board.instance_variable_get(:@board)[1][1] = 'y'
         board.instance_variable_get(:@board)[1][2] = 'y'
-        expect(board.board_status).to eq(:win)
+        expect(board.board_status).to eq(:red)
       end
     end
 
-    context 'when there are four in a column unrealistically placed from rows 4 to 7' do
-      it 'returns :win' do
+    context 'when there are four yellow in a column unrealistically placed from rows 4 to 7' do
+      it 'returns :yellow' do
         board.instance_variable_get(:@board)[5][0] = 'r'
         board.instance_variable_get(:@board)[5][1] = 'y'
-        board.instance_variable_get(:@board)[5][2] = 'r'
-        board.instance_variable_get(:@board)[5][3] = 'r'
-        board.instance_variable_get(:@board)[5][4] = 'r'
-        board.instance_variable_get(:@board)[5][5] = 'r'
-        expect(board.board_status).to eq(:win)
+        board.instance_variable_get(:@board)[5][2] = 'y'
+        board.instance_variable_get(:@board)[5][3] = 'y'
+        board.instance_variable_get(:@board)[5][4] = 'y'
+        board.instance_variable_get(:@board)[5][5] = 'y'
+        expect(board.board_status).to eq(:yellow)
       end
     end
 
@@ -171,33 +171,33 @@ RSpec.describe Board do
       end
     end
 
-    context 'when there are four in a row diagonally from the top left spot' do
-      it 'returns :win' do
-        board.instance_variable_get(:@board)[0][5] = 'r'
-        board.instance_variable_get(:@board)[1][4] = 'r'
-        board.instance_variable_get(:@board)[2][3] = 'r'
-        board.instance_variable_get(:@board)[3][2] = 'r'
-        expect(board.board_status).to eq(:win)
+    context 'when there are four yellow in a row diagonally from the top left spot' do
+      it 'returns :yellow' do
+        board.instance_variable_get(:@board)[0][5] = 'y'
+        board.instance_variable_get(:@board)[1][4] = 'y'
+        board.instance_variable_get(:@board)[2][3] = 'y'
+        board.instance_variable_get(:@board)[3][2] = 'y'
+        expect(board.board_status).to eq(:yellow)
       end
     end
 
-    context 'when there are four in a row diagonally from the top spot in the fourth column' do
-      it 'returns :win' do
+    context 'when there are four red in a row diagonally from the top spot in the fourth column' do
+      it 'returns :red' do
         board.instance_variable_get(:@board)[3][5] = 'r'
         board.instance_variable_get(:@board)[4][4] = 'r'
         board.instance_variable_get(:@board)[5][3] = 'r'
         board.instance_variable_get(:@board)[6][2] = 'r'
-        expect(board.board_status).to eq(:win)
+        expect(board.board_status).to eq(:red)
       end
     end
 
-    context 'when there are four in a row diagonally from the fourth row, fourth column spot' do
-      it 'returns :win' do
+    context 'when there are four red in a row diagonally from the fourth row, fourth column spot' do
+      it 'returns :red' do
         board.instance_variable_get(:@board)[3][3] = 'r'
         board.instance_variable_get(:@board)[4][2] = 'r'
         board.instance_variable_get(:@board)[5][1] = 'r'
         board.instance_variable_get(:@board)[6][0] = 'r'
-        expect(board.board_status).to eq(:win)
+        expect(board.board_status).to eq(:red)
       end
     end
 
@@ -211,33 +211,33 @@ RSpec.describe Board do
       end
     end
 
-    context 'when there are four in a row diagonally from the top right spot' do
-      it 'returns :win' do
-        board.instance_variable_get(:@board)[6][5] = 'r'
-        board.instance_variable_get(:@board)[5][4] = 'r'
-        board.instance_variable_get(:@board)[4][3] = 'r'
-        board.instance_variable_get(:@board)[3][2] = 'r'
-        expect(board.board_status).to eq(:win)
+    context 'when there are four yellow in a row diagonally from the top right spot' do
+      it 'returns :yellow' do
+        board.instance_variable_get(:@board)[6][5] = 'y'
+        board.instance_variable_get(:@board)[5][4] = 'y'
+        board.instance_variable_get(:@board)[4][3] = 'y'
+        board.instance_variable_get(:@board)[3][2] = 'y'
+        expect(board.board_status).to eq(:yellow)
       end
     end
 
-    context 'when there are four in a row diagonally from the top spot in the fourth column' do
-      it 'returns :win' do
+    context 'when there are four red in a row diagonally from the top spot in the fourth column' do
+      it 'returns :red' do
         board.instance_variable_get(:@board)[3][5] = 'r'
         board.instance_variable_get(:@board)[2][4] = 'r'
         board.instance_variable_get(:@board)[1][3] = 'r'
         board.instance_variable_get(:@board)[0][2] = 'r'
-        expect(board.board_status).to eq(:win)
+        expect(board.board_status).to eq(:red)
       end
     end
 
-    context 'when there are four in a row diagonally from the fourth row, fourth column spot' do
-      it 'returns :win' do
+    context 'when there are four red in a row diagonally from the fourth row, fourth column spot' do
+      it 'returns :red' do
         board.instance_variable_get(:@board)[3][3] = 'r'
         board.instance_variable_get(:@board)[2][2] = 'r'
         board.instance_variable_get(:@board)[1][1] = 'r'
         board.instance_variable_get(:@board)[0][0] = 'r'
-        expect(board.board_status).to eq(:win)
+        expect(board.board_status).to eq(:red)
       end
     end
 
