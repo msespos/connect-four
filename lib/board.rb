@@ -12,7 +12,7 @@ class Board
 
   # build a blank board
   def board
-    @board = Array.new(7) { Array.new(6) { '-' } }
+    @board = Array.new(7) { Array.new(6) { nil } }
   end
 
   # drop a token into one of the columns on the board, assuming a slot is available
@@ -37,7 +37,7 @@ class Board
   def row_to_use(column)
     row = 0
     while row < 6
-      return row if @board[column][row] == '-'
+      return row if @board[column][row] == nil
 
       row += 1
     end
@@ -48,19 +48,14 @@ class Board
   def winner_or_none(win_type)
     @board.each_with_index do |column, column_index|
       column.each_index do |row_index|
-        next if @board[column_index][row_index] == '-'
+        next if @board[column_index][row_index] == nil
 
         next if four_consecutive?(column_index, row_index, win_type) == :invalid
 
-        return symbol(@board[column_index][row_index]) if four_consecutive?(column_index, row_index, win_type)
+        return @board[column_index][row_index] if four_consecutive?(column_index, row_index, win_type)
       end
     end
     :no_winner_yet
-  end
-
-  # used by #winner_or_none to convert a string on the board into a symbol
-  def symbol(string)
-    string == 'r' ? :red : :yellow
   end
 
   # used by #winner_or_none to check four spots given an initial spot to see if they are
