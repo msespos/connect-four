@@ -50,27 +50,12 @@ class Board
       column.each_index do |row_index|
         next if @board[column_index][row_index] == '-'
 
-        next if indices_within_threshold(column_index, row_index, win_type)
+        next if four_consecutive?(column_index, row_index, win_type) == :invalid
 
         return symbol(@board[column_index][row_index]) if four_consecutive?(column_index, row_index, win_type)
       end
     end
     :no_winner_yet
-  end
-
-  # used by #winner_or_none to determine if the indices being examined are within the
-  # appropriate threshold for the win_type
-  def indices_within_threshold(column_index, row_index, win_type)
-    case win_type
-    when :row
-      column_index > 3
-    when :column
-      row_index > 2
-    when :negative_slope_diagonal
-      row_index < 3 || column_index > 3
-    when :positive_slope_diagonal
-      row_index < 3 || column_index < 3
-    end
   end
 
   # used by #winner_or_none to convert a string on the board into a symbol
@@ -81,6 +66,8 @@ class Board
   # used by #winner_or_none to check four spots given an initial spot to see if they are
   # consecutive of one color
   def four_consecutive?(column_index, row_index, win_type)
+    return :invalid if win_spots(column_index, row_index, win_type) == :invalid
+
     first_spot, second_spot, third_spot, fourth_spot = win_spots(column_index, row_index, win_type)
     first_spot == second_spot && first_spot == third_spot && first_spot == fourth_spot
   end
@@ -89,11 +76,13 @@ class Board
   # shifts as appropriate to the type of win
   def win_spots(column_index, row_index, win_type)
     column_shift, row_shift = shifts(win_type)
-    first_spot = @board[column_index][row_index]
-    second_spot = @board[column_index + column_shift][row_index + row_shift]
-    third_spot = @board[column_index + column_shift * 2][row_index + row_shift * 2]
-    fourth_spot = @board[column_index + column_shift * 3][row_index + row_shift * 3]
-    [first_spot, second_spot, third_spot, fourth_spot]
+    win_spots = []
+    (0..3).each do |i|
+      return :invalid unless valid_coordinates?(column_index + column_shift * i, row_index + row_shift * i)
+
+      win_spots[i] = @board[column_index + column_shift * i][row_index + row_shift * i]
+    end
+    win_spots
   end
 
   # used by #win_spots to generate the appropriate column and row shifts according to win_type
@@ -107,5 +96,10 @@ class Board
       end
     end
     [column_shift, row_shift]
+  end
+
+  # used by #win_spots to determine if the indices being examined are valid coordinates
+  def valid_coordinates?(column_index, row_index)
+    column_index >= 0 && column_index <= 6 && row_index >= 0 && row_index <= 5
   end
 end
