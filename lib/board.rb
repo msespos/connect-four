@@ -12,7 +12,7 @@ class Board
 
   # build a blank board
   def board
-    @board = Array.new(7) { Array.new(6) { '-' } }
+    @board = Array.new(7) { Array.new(6) { ' - ' } }
   end
 
   # drop a token into one of the columns on the board, assuming a slot is available
@@ -30,29 +30,40 @@ class Board
     :no_win_yet
   end
 
+  # the string that represents the game board during play
   def to_s
     string = ''
+    bottom_of_board(main_board(string))
+  end
+
+  private
+
+  # used by to_s to draw the main 7x6 board with spaces, tokens and borders
+  def main_board(string)
     (0..5).each do |row|
-      string += '   '
+      string += '    |' + '     |' * 7 + "\n   "
       (0..6).each do |column|
         rows = ' | ' + @board[column][5 - row].to_s
         string += rows
       end
-      string += " |\n"
+      string += " |\n    " + '|     ' * 7 + "|\n"
     end
-    string += '    -' + '-' * 28 + "\n" + '    |'
-    (1..7).each { |column_value| string += ' ' + column_value.to_s + ' |' }
     string
   end
 
-  private
+  # used by to_s to draw the bottom section of the board
+  def bottom_of_board(string)
+    string += '    -' + '-' * 42 + "\n" + '    |'
+    (1..7).each { |column_value| string += '  ' + column_value.to_s + '  |' }
+    string
+  end
 
   # used by #drop_token to determine which row, if any, should be used to place a
   # token given a column - returns an error message if the column is full already
   def row_to_use(column)
     row = 0
     while row < 6
-      return row if @board[column][row] == '-'
+      return row if @board[column][row] == ' - '
 
       row += 1
     end
@@ -63,7 +74,7 @@ class Board
   def winner_or_none(win_type)
     @board.each_with_index do |column, column_index|
       column.each_index do |row_index|
-        next if @board[column_index][row_index] == '-'
+        next if @board[column_index][row_index] == ' - '
 
         next if four_consecutive?(column_index, row_index, win_type) == :invalid
 

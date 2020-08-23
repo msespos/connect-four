@@ -17,11 +17,11 @@ RSpec.describe Board do
       end
 
       it 'generates a board with "-" in the bottom left spot' do
-        expect(board.instance_variable_get(:@board)[0][0]).to eq('-')
+        expect(board.instance_variable_get(:@board)[0][0]).to eq(' - ')
       end
 
       it 'generates a board with "-" in the bottom right spot' do
-        expect(board.instance_variable_get(:@board)[6][0]).to eq('-')
+        expect(board.instance_variable_get(:@board)[6][0]).to eq(' - ')
       end
     end
   end
@@ -253,15 +253,19 @@ RSpec.describe Board do
 
     context 'viewing the board' do
       it 'displays the board' do
-        board.drop_token('$', 0)
-        board.drop_token('@', 0)
-        board.drop_token('$', 5)
-        board.drop_token('@', 0)
-        board.drop_token('$', 4)
-        board.drop_token('@', 0)
-        board.drop_token('$', 5)
-        board.drop_token('@', 1)
-        board.drop_token('$', 5)
+        leo_token = " \u264C".encode('utf-8')
+        do_not_enter_token = " \u26D4".encode('utf-8')
+        board.drop_token(leo_token, 0)
+        board.drop_token(do_not_enter_token, 0)
+        board.drop_token(leo_token, 5)
+        board.drop_token(do_not_enter_token, 0)
+        board.drop_token(leo_token, 4)
+        board.drop_token(do_not_enter_token, 0)
+        board.drop_token(leo_token, 5)
+        board.drop_token(do_not_enter_token, 1)
+        board.drop_token(leo_token, 5)
+        puts
+        puts
         puts board.to_s
       end
     end
