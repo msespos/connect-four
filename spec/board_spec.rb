@@ -17,11 +17,11 @@ RSpec.describe Board do
       end
 
       it 'generates a board with "-" in the bottom left spot' do
-        expect(board.instance_variable_get(:@board)[0][0]).to eq(nil)
+        expect(board.instance_variable_get(:@board)[0][0]).to eq('-')
       end
 
       it 'generates a board with "-" in the bottom right spot' do
-        expect(board.instance_variable_get(:@board)[6][0]).to eq(nil)
+        expect(board.instance_variable_get(:@board)[6][0]).to eq('-')
       end
     end
   end
@@ -248,6 +248,21 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[5][3] = :red
         board.instance_variable_get(:@board)[6][1] = :red
         expect(board.board_status).to eq(:no_win_yet)
+      end
+    end
+
+    context 'viewing the board' do
+      it 'displays the board' do
+        board.drop_token('$', 0)
+        board.drop_token('@', 0)
+        board.drop_token('$', 5)
+        board.drop_token('@', 0)
+        board.drop_token('$', 4)
+        board.drop_token('@', 0)
+        board.drop_token('$', 5)
+        board.drop_token('@', 1)
+        board.drop_token('$', 5)
+        puts board.to_s
       end
     end
   end

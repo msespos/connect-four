@@ -12,7 +12,7 @@ class Board
 
   # build a blank board
   def board
-    @board = Array.new(7) { Array.new(6) { nil } }
+    @board = Array.new(7) { Array.new(6) { '-' } }
   end
 
   # drop a token into one of the columns on the board, assuming a slot is available
@@ -30,6 +30,21 @@ class Board
     :no_win_yet
   end
 
+  def to_s
+    string = ''
+    (0..5).each do |row|
+      string += '   '
+      (0..6).each do |column|
+        rows = ' | ' + @board[column][5 - row].to_s
+        string += rows
+      end
+      string += " |\n"
+    end
+    string += '    -' + '-' * 28 + "\n" + '    |'
+    (1..7).each { |column_value| string += ' ' + column_value.to_s + ' |' }
+    string
+  end
+
   private
 
   # used by #drop_token to determine which row, if any, should be used to place a
@@ -37,7 +52,7 @@ class Board
   def row_to_use(column)
     row = 0
     while row < 6
-      return row if @board[column][row] == nil
+      return row if @board[column][row] == '-'
 
       row += 1
     end
@@ -48,7 +63,7 @@ class Board
   def winner_or_none(win_type)
     @board.each_with_index do |column, column_index|
       column.each_index do |row_index|
-        next if @board[column_index][row_index] == nil
+        next if @board[column_index][row_index] == '-'
 
         next if four_consecutive?(column_index, row_index, win_type) == :invalid
 
