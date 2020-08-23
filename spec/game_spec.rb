@@ -7,15 +7,15 @@ require_relative '../lib/game.rb'
 RSpec.describe Game do
   subject(:game) { Game.new }
   describe '#end_of_game_output' do
-    context 'when the game is over with a yellow win' do
-      it 'returns "Yellow wins!"' do
-        expect(game.end_of_game_output(:yellow)).to eq('Yellow wins!')
+    context 'when the game is over with a do_not_enter win' do
+      it 'returns "Do Not Enter wins!"' do
+        expect(game.end_of_game_output(:do_not_enter)).to eq('Do Not Enter wins!')
       end
     end
 
-    context 'when the game is over with a red win' do
-      it 'returns "Red wins!"' do
-        expect(game.end_of_game_output(:red)).to eq('Red wins!')
+    context 'when the game is over with a leo win' do
+      it 'returns "Leo wins!"' do
+        expect(game.end_of_game_output(:leo)).to eq('Leo wins!')
       end
     end
 
@@ -28,19 +28,19 @@ RSpec.describe Game do
 
   describe '#outcome' do
     context 'when checking the game outcome' do
-      it 'returns :red if there are four reds in a row' do
-        game.instance_variable_set(:@red, 4)
-        expect(game.outcome).to eq(:red)
+      it 'returns :leo if there are four leos in a row' do
+        game.instance_variable_set(:@leo, 4)
+        expect(game.outcome).to eq(:leo)
       end
 
-      it 'returns :yellow if there are four yellows in a row' do
-        game.instance_variable_set(:@yellow, 4)
-        expect(game.outcome).to eq(:yellow)
+      it 'returns :do_not_enter if there are four do_not_enters in a row' do
+        game.instance_variable_set(:@do_not_enter, 4)
+        expect(game.outcome).to eq(:do_not_enter)
       end
 
       it 'returns :draw if there are no winners and the board is full' do
-        game.instance_variable_set(:@red, 3)
-        game.instance_variable_set(:@yellow, 3)
+        game.instance_variable_set(:@leo, 3)
+        game.instance_variable_set(:@do_not_enter, 3)
         game.instance_variable_set(:@turns, 42)
         expect(game.outcome).to eq(:draw)
       end
@@ -49,13 +49,13 @@ RSpec.describe Game do
 
   describe '#game_over?' do
     context 'when checking if the game is over' do
-      it 'returns true if there are four reds in a row' do
-        game.instance_variable_set(:@red, 4)
+      it 'returns true if there are four leos in a row' do
+        game.instance_variable_set(:@leo, 4)
         expect(game.game_over?).to eq(true)
       end
 
-      it 'returns true if there are four yellows in a row' do
-        game.instance_variable_set(:@yellow, 4)
+      it 'returns true if there are four do_not_enters in a row' do
+        game.instance_variable_set(:@do_not_enter, 4)
         expect(game.game_over?).to eq(true)
       end
 
@@ -65,8 +65,8 @@ RSpec.describe Game do
       end
 
       it 'returns if none of the conditions are true' do
-        game.instance_variable_set(:@red, 3)
-        game.instance_variable_set(:@yellow, 3)
+        game.instance_variable_set(:@leo, 3)
+        game.instance_variable_set(:@do_not_enter, 3)
         game.instance_variable_set(:@turns, 41)
         expect(game.game_over?).to eq(false)
       end

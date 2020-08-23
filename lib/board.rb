@@ -22,7 +22,7 @@ class Board
     @board[column][row_to_use(column)] = token
   end
 
-  # determine if the board is in a red win, yellow win, or no win yet state
+  # determine if the board is in a leo win, do_not_enter win, or no win yet state
   def board_status
     WIN_TYPES.each do |win_type|
       return winner_or_none(win_type) if winner_or_none(win_type) != :no_winner_yet
