@@ -64,11 +64,23 @@ RSpec.describe Game do
         expect(game.game_over?).to eq(true)
       end
 
-      it 'returns if none of the conditions are true' do
+      it 'returns false if none of the conditions are true' do
         game.instance_variable_set(:@leo, 3)
         game.instance_variable_set(:@do_not_enter, 3)
         game.instance_variable_set(:@turns, 41)
         expect(game.game_over?).to eq(false)
+      end
+    end
+  end
+
+  describe '#play_turn' do
+    subject(:game_play) { described_class.new(board_play) }
+    let(:board_play) { instance_double(Board) }
+    context 'when playing a leo token in column 1' do
+      it 'calls Board#drop_token with :leo and 0' do
+        allow(board_play).to receive(:drop_token)
+        expect(board_play).to receive(:drop_token).with(:leo, 0)
+        game_play.play_turn(:leo, 1)
       end
     end
   end

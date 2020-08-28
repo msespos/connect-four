@@ -2,6 +2,10 @@
 
 # gameplay class
 class Game
+  def initialize(board = Board.new)
+    @board = board
+  end
+
   def end_of_game_output(outcome)
     if outcome == :do_not_enter
       'Do Not Enter wins!'
@@ -24,5 +28,10 @@ class Game
     elsif @turns == 42
       :draw
     end
+  end
+
+  def play_turn(token, column)
+    @board.drop_token(token, column - 1)
+    puts end_of_game_output(outcome) if game_over?
   end
 end

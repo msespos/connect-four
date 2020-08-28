@@ -5,6 +5,8 @@ class Board
   COLUMN_SHIFTS = [1, 0, 1, -1].freeze
   ROW_SHIFTS = [0, 1, -1, -1].freeze
   WIN_TYPES = %i[row column negative_slope_diagonal positive_slope_diagonal].freeze
+  LEO_TOKEN = " \u264C".encode('utf-8').freeze
+  DO_NOT_ENTER_TOKEN = " \u26D4".encode('utf-8').freeze
 
   def initialize
     board
@@ -25,7 +27,7 @@ class Board
   # determine if the board is in a leo win, do_not_enter win, or no win yet state
   def board_status
     WIN_TYPES.each do |win_type|
-      return winner_or_none(win_type) if winner_or_none(win_type) != :no_winner_yet
+      return win_type_to_symbol(winner_or_none(win_type)) if winner_or_none(win_type) != :no_win_yet
     end
     :no_win_yet
   end
@@ -81,7 +83,18 @@ class Board
         return @board[column_index][row_index] if four_consecutive?(column_index, row_index, win_type)
       end
     end
-    :no_winner_yet
+    :no_win_yet
+  end
+
+  # used by #board_status to convert strings from #winner_or_none to their corresponding symbols
+  def win_type_to_symbol(win_type)
+    if win_type == LEO_TOKEN
+      :leo
+    elsif win_type == DO_NOT_ENTER_TOKEN
+      :do_not_enter
+    else
+      :no_win_yet
+    end
   end
 
   # used by #winner_or_none to check four spots given an initial spot to see if they are
