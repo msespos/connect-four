@@ -83,14 +83,14 @@ RSpec.describe Board do
     end
   end
 
-  describe '#board_status' do
+  describe '#win_status' do
     context 'when there are four leos in a row along the bottom from columns 1 to 4' do
       it 'returns :leo' do
         board.instance_variable_get(:@board)[0][0] = Board::LEO_TOKEN
         board.instance_variable_get(:@board)[1][0] = Board::LEO_TOKEN
         board.instance_variable_get(:@board)[2][0] = Board::LEO_TOKEN
         board.instance_variable_get(:@board)[3][0] = Board::LEO_TOKEN
-        expect(board.board_status).to eq(:leo)
+        expect(board.win_status).to eq(:leo)
       end
     end
 
@@ -100,7 +100,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[4][5] = Board::LEO_TOKEN
         board.instance_variable_get(:@board)[5][5] = Board::LEO_TOKEN
         board.instance_variable_get(:@board)[6][5] = Board::LEO_TOKEN
-        expect(board.board_status).to eq(:leo)
+        expect(board.win_status).to eq(:leo)
       end
     end
 
@@ -109,7 +109,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[0][0] = Board::DO_NOT_ENTER_TOKEN
         board.instance_variable_get(:@board)[1][0] = Board::LEO_TOKEN
         board.instance_variable_get(:@board)[2][0] = Board::LEO_TOKEN
-        expect(board.board_status).to eq(:no_win_yet)
+        expect(board.win_status).to eq(:no_win_yet)
       end
     end
 
@@ -120,7 +120,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[4][0] = Board::LEO_TOKEN
         board.instance_variable_get(:@board)[5][0] = Board::LEO_TOKEN
         board.instance_variable_get(:@board)[6][0] = Board::LEO_TOKEN
-        expect(board.board_status).to eq(:no_win_yet)
+        expect(board.win_status).to eq(:no_win_yet)
       end
     end
 
@@ -133,7 +133,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[1][0] = Board::DO_NOT_ENTER_TOKEN
         board.instance_variable_get(:@board)[1][1] = Board::DO_NOT_ENTER_TOKEN
         board.instance_variable_get(:@board)[1][2] = Board::DO_NOT_ENTER_TOKEN
-        expect(board.board_status).to eq(:leo)
+        expect(board.win_status).to eq(:leo)
       end
     end
 
@@ -145,7 +145,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[5][3] = Board::DO_NOT_ENTER_TOKEN
         board.instance_variable_get(:@board)[5][4] = Board::DO_NOT_ENTER_TOKEN
         board.instance_variable_get(:@board)[5][5] = Board::DO_NOT_ENTER_TOKEN
-        expect(board.board_status).to eq(:do_not_enter)
+        expect(board.win_status).to eq(:do_not_enter)
       end
     end
 
@@ -155,7 +155,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[1][0] = Board::DO_NOT_ENTER_TOKEN
         board.instance_variable_get(:@board)[0][1] = Board::LEO_TOKEN
         board.instance_variable_get(:@board)[0][2] = Board::LEO_TOKEN
-        expect(board.board_status).to eq(:no_win_yet)
+        expect(board.win_status).to eq(:no_win_yet)
       end
     end
 
@@ -167,7 +167,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[4][0] = Board::LEO_TOKEN
         board.instance_variable_get(:@board)[5][0] = Board::LEO_TOKEN
         board.instance_variable_get(:@board)[6][0] = Board::LEO_TOKEN
-        expect(board.board_status).to eq(:no_win_yet)
+        expect(board.win_status).to eq(:no_win_yet)
       end
     end
 
@@ -177,7 +177,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[1][4] = Board::DO_NOT_ENTER_TOKEN
         board.instance_variable_get(:@board)[2][3] = Board::DO_NOT_ENTER_TOKEN
         board.instance_variable_get(:@board)[3][2] = Board::DO_NOT_ENTER_TOKEN
-        expect(board.board_status).to eq(:do_not_enter)
+        expect(board.win_status).to eq(:do_not_enter)
       end
     end
 
@@ -187,7 +187,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[4][4] = Board::LEO_TOKEN
         board.instance_variable_get(:@board)[5][3] = Board::LEO_TOKEN
         board.instance_variable_get(:@board)[6][2] = Board::LEO_TOKEN
-        expect(board.board_status).to eq(:leo)
+        expect(board.win_status).to eq(:leo)
       end
     end
 
@@ -197,7 +197,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[4][2] = Board::LEO_TOKEN
         board.instance_variable_get(:@board)[5][1] = Board::LEO_TOKEN
         board.instance_variable_get(:@board)[6][0] = Board::LEO_TOKEN
-        expect(board.board_status).to eq(:leo)
+        expect(board.win_status).to eq(:leo)
       end
     end
 
@@ -207,7 +207,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[4][4] = Board::LEO_TOKEN
         board.instance_variable_get(:@board)[5][3] = Board::LEO_TOKEN
         board.instance_variable_get(:@board)[6][1] = Board::LEO_TOKEN
-        expect(board.board_status).to eq(:no_win_yet)
+        expect(board.win_status).to eq(:no_win_yet)
       end
     end
 
@@ -217,7 +217,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[5][4] = Board::DO_NOT_ENTER_TOKEN
         board.instance_variable_get(:@board)[4][3] = Board::DO_NOT_ENTER_TOKEN
         board.instance_variable_get(:@board)[3][2] = Board::DO_NOT_ENTER_TOKEN
-        expect(board.board_status).to eq(:do_not_enter)
+        expect(board.win_status).to eq(:do_not_enter)
       end
     end
 
@@ -227,7 +227,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[2][4] = Board::LEO_TOKEN
         board.instance_variable_get(:@board)[1][3] = Board::LEO_TOKEN
         board.instance_variable_get(:@board)[0][2] = Board::LEO_TOKEN
-        expect(board.board_status).to eq(:leo)
+        expect(board.win_status).to eq(:leo)
       end
     end
 
@@ -237,7 +237,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[2][2] = Board::LEO_TOKEN
         board.instance_variable_get(:@board)[1][1] = Board::LEO_TOKEN
         board.instance_variable_get(:@board)[0][0] = Board::LEO_TOKEN
-        expect(board.board_status).to eq(:leo)
+        expect(board.win_status).to eq(:leo)
       end
     end
 
@@ -247,7 +247,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[4][4] = Board::LEO_TOKEN
         board.instance_variable_get(:@board)[5][3] = Board::LEO_TOKEN
         board.instance_variable_get(:@board)[6][1] = Board::LEO_TOKEN
-        expect(board.board_status).to eq(:no_win_yet)
+        expect(board.win_status).to eq(:no_win_yet)
       end
     end
 

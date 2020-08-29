@@ -5,70 +5,65 @@
 require_relative '../lib/game.rb'
 
 RSpec.describe Game do
-  subject(:game) { Game.new }
+  subject(:game) { described_class.new(board_end) }
   describe '#end_of_game_output' do
-    context 'when the game is over with a do_not_enter win' do
-      it 'returns "Do Not Enter wins!"' do
-        expect(game.end_of_game_output(:do_not_enter)).to eq('Do Not Enter wins!')
+    context 'when the game is over with a leo win' do
+      let(:board_end) { instance_double(Board, win_status: :leo) }
+      it 'returns "Leo wins!"' do
+        output = game.end_of_game_output
+        expect(output).to eq('Leo wins!')
       end
     end
 
-    context 'when the game is over with a leo win' do
-      it 'returns "Leo wins!"' do
-        expect(game.end_of_game_output(:leo)).to eq('Leo wins!')
+    context 'when the game is over with a do not enter win' do
+      let(:board_end) { instance_double(Board, win_status: :do_not_enter) }
+      it 'returns "Do Not Enter wins!"' do
+        output = game.end_of_game_output
+        expect(output).to eq('Do Not Enter wins!')
       end
     end
 
     context 'when the game is over with a tie' do
+      let(:board_end) { instance_double(Board, win_status: :no_win_yet) }
       it 'returns "It\'s a draw!"' do
-        expect(game.end_of_game_output(:draw)).to eq('It\'s a draw!')
-      end
-    end
-  end
-
-  describe '#outcome' do
-    context 'when checking the game outcome' do
-      it 'returns :leo if there are four leos in a row' do
-        game.instance_variable_set(:@leo, 4)
-        expect(game.outcome).to eq(:leo)
-      end
-
-      it 'returns :do_not_enter if there are four do_not_enters in a row' do
-        game.instance_variable_set(:@do_not_enter, 4)
-        expect(game.outcome).to eq(:do_not_enter)
-      end
-
-      it 'returns :draw if there are no winners and the board is full' do
-        game.instance_variable_set(:@leo, 3)
-        game.instance_variable_set(:@do_not_enter, 3)
-        game.instance_variable_set(:@turns, 42)
-        expect(game.outcome).to eq(:draw)
+        output = game.end_of_game_output
+        expect(output).to eq('It\'s a draw!')
       end
     end
   end
 
   describe '#game_over?' do
-    context 'when checking if the game is over' do
-      it 'returns true if there are four leos in a row' do
-        game.instance_variable_set(:@leo, 4)
-        expect(game.game_over?).to eq(true)
+    subject(:game) { described_class.new(board_over) }
+    context 'when the win status is :leo' do
+      let(:board_over) { instance_double(Board, win_status: :leo) }
+      it 'returns true' do
+        game_over = game.game_over?
+        expect(game_over).to eq(true)
       end
+    end
 
-      it 'returns true if there are four do_not_enters in a row' do
-        game.instance_variable_set(:@do_not_enter, 4)
-        expect(game.game_over?).to eq(true)
+    context 'when the win status is :do_not_enter' do
+      let(:board_over) { instance_double(Board, win_status: :do_not_enter) }
+      it 'returns true' do
+        game_over = game.game_over?
+        expect(game_over).to eq(true)
       end
+    end
 
-      it 'returns true if the board is full' do
+    context 'when 42 turns have been played' do
+      let(:board_over) { instance_double(Board, win_status: :no_win_yet) }
+      it 'returns true' do
         game.instance_variable_set(:@turns, 42)
-        expect(game.game_over?).to eq(true)
+        game_over = game.game_over?
+        expect(game_over).to eq(true)
       end
+    end
 
-      it 'returns false if none of the conditions are true' do
-        game.instance_variable_set(:@leo, 3)
-        game.instance_variable_set(:@do_not_enter, 3)
-        game.instance_variable_set(:@turns, 41)
-        expect(game.game_over?).to eq(false)
+    context 'when the win status is :no_win_yet' do
+      let(:board_over) { instance_double(Board, win_status: :no_win_yet) }
+      it 'returns false' do
+        game_over = game.game_over?
+        expect(game_over).to eq(false)
       end
     end
   end
@@ -78,9 +73,9 @@ RSpec.describe Game do
     let(:board_play) { instance_double(Board) }
     context 'when playing a leo token in column 1' do
       it 'calls Board#drop_token with :leo and 0' do
-        allow(board_play).to receive(:drop_token)
-        expect(board_play).to receive(:drop_token).with(:leo, 0)
-        game_play.play_turn(:leo, 1)
+        allow(game_play).to receive(:game_over?).and_return(false)
+        expect(board_play).to receive(:drop_token).with(Board::LEO_TOKEN, 0)
+        game_play.play_turn(Board::LEO_TOKEN, 1)
       end
     end
   end

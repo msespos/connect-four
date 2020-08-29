@@ -25,7 +25,7 @@ class Board
   end
 
   # determine if the board is in a leo win, do_not_enter win, or no win yet state
-  def board_status
+  def win_status
     WIN_TYPES.each do |win_type|
       return win_type_to_symbol(winner_or_none(win_type)) if winner_or_none(win_type) != :no_win_yet
     end
@@ -72,7 +72,7 @@ class Board
     :error
   end
 
-  # used by #board_status to determine the winner if there is a winner at this point in the game
+  # used by #win_status to determine the winner if there is a winner at this point in the game
   def winner_or_none(win_type)
     @board.each_with_index do |column, column_index|
       column.each_index do |row_index|
@@ -86,7 +86,7 @@ class Board
     :no_win_yet
   end
 
-  # used by #board_status to convert strings from #winner_or_none to their corresponding symbols
+  # used by #win_status to convert strings from #winner_or_none to their corresponding symbols
   def win_type_to_symbol(win_type)
     if win_type == LEO_TOKEN
       :leo
