@@ -5,8 +5,41 @@
 require_relative '../lib/game.rb'
 
 RSpec.describe Game do
-  subject(:game) { described_class.new(board_end) }
+  describe '#play_game' do
+    subject(:game_play) { described_class.new }
+    context 'when game_over? is false once' do
+      before do
+        allow(game_play).to receive(:game_over?).and_return(false, true)
+      end
+      it 'calls play_turn one time' do
+        expect(game_play).to receive(:play_turn).once
+        game_play.play_game
+      end
+    end
+
+    context 'when game_over? is false twice' do
+      before do
+        allow(game_play).to receive(:game_over?).and_return(false, false, true)
+      end
+      it 'calls play_turn twice' do
+        expect(game_play).to receive(:play_turn).twice
+        game_play.play_game
+      end
+    end
+
+    context 'when game_over? is false five times' do
+      before do
+        allow(game_play).to receive(:game_over?).and_return(false, false, false, false, false, true)
+      end
+      it 'calls play_turn five times' do
+        expect(game_play).to receive(:play_turn).exactly(5).times
+        game_play.play_game
+      end
+    end
+  end
+
   describe '#end_of_game_output' do
+    subject(:game) { described_class.new(board_end) }
     context 'when the game is over with a leo win' do
       let(:board_end) { instance_double(Board, win_status: :leo) }
       it 'returns "Leo wins!"' do

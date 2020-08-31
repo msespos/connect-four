@@ -57,7 +57,7 @@ class Board
   def bottom_of_board(string)
     string += '    -' + '-' * 42 + "\n" + '    |'
     (1..7).each { |column_value| string += '  ' + column_value.to_s + '  |' }
-    string
+    string += "\n\n"
   end
 
   # used by #drop_token to determine which row, if any, should be used to place a
