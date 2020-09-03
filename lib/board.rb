@@ -19,7 +19,7 @@ class Board
 
   # drop a token into one of the columns on the board, assuming a slot is available
   def drop_token(token, column)
-    return :error if row_to_use(column) == :error
+    return if row_to_use(column) == :error
 
     @board[column][row_to_use(column)] = token
   end
@@ -36,6 +36,19 @@ class Board
   def to_s
     string = ''
     bottom_of_board(main_board(string))
+  end
+
+  # used by #drop_token to determine which row, if any, should be used to place a
+  # token given a column - returns an error message if the column is full already
+  # used by Game#obtain_column to check for full columns
+  def row_to_use(column)
+    row = 0
+    while row < 6
+      return row if @board[column][row] == ' - '
+
+      row += 1
+    end
+    :error
   end
 
   private
@@ -58,18 +71,6 @@ class Board
     string += '    -' + '-' * 42 + "\n" + '    |'
     (1..7).each { |column_value| string += '  ' + column_value.to_s + '  |' }
     string += "\n\n"
-  end
-
-  # used by #drop_token to determine which row, if any, should be used to place a
-  # token given a column - returns an error message if the column is full already
-  def row_to_use(column)
-    row = 0
-    while row < 6
-      return row if @board[column][row] == ' - '
-
-      row += 1
-    end
-    :error
   end
 
   # used by #win_status to determine the winner if there is a winner at this point in the game

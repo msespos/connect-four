@@ -22,7 +22,7 @@ class Game
   # used by #play_game to play one turn
   def play_turn
     token = obtain_token
-    column = obtain_column.to_i
+    column = obtain_column
     @board.drop_token(token, column - 1)
     @turns += 1
     @player_number = @player_number == 1 ? 2 : 1
@@ -40,8 +40,6 @@ class Game
     end
   end
 
-  private
-
   # used by #play_turn to get the current token to drop
   def obtain_token
     @player_number == 1 ? Board::LEO_TOKEN : Board::DO_NOT_ENTER_TOKEN
@@ -50,6 +48,11 @@ class Game
   # used by #play_turn to get the current column to drop the token in
   def obtain_column
     puts "Player #{@player_number}, pick a column (1-7)"
-    gets.chomp
+    column = gets.chomp.to_i
+    until [1, 2, 3, 4, 5, 6, 7].include?(column) && @board.row_to_use(column - 1) != :error
+      puts 'Please enter a valid column number (1-7)'
+      column = gets.chomp.to_i
+    end
+    column
   end
 end
