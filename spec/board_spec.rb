@@ -83,6 +83,25 @@ RSpec.describe Board do
         expect(row_to_use_return).to eq(:error)
       end
     end
+
+    context 'when the board is empty and a token is dropped in the second column' do
+      it 'returns 0' do
+        row_to_use_return = board.row_to_use(1)
+        expect(row_to_use_return).to eq(0)
+      end
+    end
+
+    context 'when the seventh column is almost full and a token is dropped in the seventh column' do
+      it 'returns 5' do
+        board.instance_variable_get(:@board)[6][0] = Board::LEO_TOKEN
+        board.instance_variable_get(:@board)[6][1] = Board::DO_NOT_ENTER_TOKEN
+        board.instance_variable_get(:@board)[6][2] = Board::LEO_TOKEN
+        board.instance_variable_get(:@board)[6][3] = Board::DO_NOT_ENTER_TOKEN
+        board.instance_variable_get(:@board)[6][4] = Board::LEO_TOKEN
+        row_to_use_return = board.row_to_use(6)
+        expect(row_to_use_return).to eq(5)
+      end
+    end
   end
 
   describe '#win_status' do
@@ -252,12 +271,13 @@ RSpec.describe Board do
         expect(board.win_status).to eq(:no_win_yet)
       end
     end
+  end
 
-    context 'viewing the board' do
-      it 'displays the board' do
+  describe '#to_s' do
+    context 'when two tokens are dropped' do
+      it 'displays the board with two tokens' do
         board.drop_token(Board::LEO_TOKEN, 0)
         board.drop_token(Board::DO_NOT_ENTER_TOKEN, 0)
-        puts
         puts
         puts board.to_s
       end

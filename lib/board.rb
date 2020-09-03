@@ -24,6 +24,19 @@ class Board
     @board[column][row_to_use(column)] = token
   end
 
+  # used by #drop_token to determine which row, if any, should be used to place a
+  # token given a column - returns an error message if the column is full already
+  # also used by Game#obtain_column to check for full columns
+  def row_to_use(column)
+    row = 0
+    while row < 6
+      return row if @board[column][row] == ' - '
+
+      row += 1
+    end
+    :error
+  end
+
   # determine if the board is in a leo win, do_not_enter win, or no win yet state
   def win_status
     WIN_TYPES.each do |win_type|
@@ -38,40 +51,7 @@ class Board
     bottom_of_board(main_board(string))
   end
 
-  # used by #drop_token to determine which row, if any, should be used to place a
-  # token given a column - returns an error message if the column is full already
-  # used by Game#obtain_column to check for full columns
-  def row_to_use(column)
-    row = 0
-    while row < 6
-      return row if @board[column][row] == ' - '
-
-      row += 1
-    end
-    :error
-  end
-
   private
-
-  # used by to_s to draw the main 7x6 board with spaces, tokens and borders
-  def main_board(string)
-    (0..5).each do |row|
-      string += '    |' + '     |' * 7 + "\n   "
-      (0..6).each do |column|
-        rows = ' | ' + @board[column][5 - row].to_s
-        string += rows
-      end
-      string += " |\n    " + '|     ' * 7 + "|\n"
-    end
-    string
-  end
-
-  # used by to_s to draw the bottom section of the board
-  def bottom_of_board(string)
-    string += '    -' + '-' * 42 + "\n" + '    |'
-    (1..7).each { |column_value| string += '  ' + column_value.to_s + '  |' }
-    string += "\n\n"
-  end
 
   # used by #win_status to determine the winner if there is a winner at this point in the game
   def winner_or_none(win_type)
@@ -136,5 +116,25 @@ class Board
   # used by #win_spots to determine if the indices being examined are valid coordinates
   def valid_coordinates?(column_index, row_index)
     column_index >= 0 && column_index <= 6 && row_index >= 0 && row_index <= 5
+  end
+
+  # used by to_s to draw the main 7x6 board with spaces, tokens and borders
+  def main_board(string)
+    (0..5).each do |row|
+      string += '    |' + '     |' * 7 + "\n   "
+      (0..6).each do |column|
+        rows = ' | ' + @board[column][5 - row].to_s
+        string += rows
+      end
+      string += " |\n    " + '|     ' * 7 + "|\n"
+    end
+    string
+  end
+
+  # used by to_s to draw the bottom section of the board
+  def bottom_of_board(string)
+    string += '    -' + '-' * 42 + "\n" + '    |'
+    (1..7).each { |column_value| string += '  ' + column_value.to_s + '  |' }
+    string += "\n\n"
   end
 end

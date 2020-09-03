@@ -14,10 +14,7 @@ class Game
     puts end_of_game_output
   end
 
-  # used by #play_game to determine if the game is over
-  def game_over?
-    @board.win_status == :leo || @board.win_status == :do_not_enter || @turns == 42
-  end
+  private
 
   # used by #play_game to play one turn
   def play_turn
@@ -27,6 +24,11 @@ class Game
     @turns += 1
     @player_number = @player_number == 1 ? 2 : 1
     puts @board.to_s
+  end
+
+  # used by #play_game to determine if the game is over
+  def game_over?
+    @board.win_status == :leo || @board.win_status == :do_not_enter || @turns == 42
   end
 
   # used by #play_game to generate the end-of-game output string
