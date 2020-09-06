@@ -274,12 +274,61 @@ RSpec.describe Board do
   end
 
   describe '#to_s' do
-    context 'when two tokens are dropped' do
-      it 'displays the board with two tokens' do
+    context 'when no tokens are dropped' do
+      it 'displays a blank board' do
+        expect { puts(board) }.to output(<<-BOARD).to_stdout
+    |     |     |     |     |     |     |     |
+    |  -  |  -  |  -  |  -  |  -  |  -  |  -  |
+    |     |     |     |     |     |     |     |
+    |     |     |     |     |     |     |     |
+    |  -  |  -  |  -  |  -  |  -  |  -  |  -  |
+    |     |     |     |     |     |     |     |
+    |     |     |     |     |     |     |     |
+    |  -  |  -  |  -  |  -  |  -  |  -  |  -  |
+    |     |     |     |     |     |     |     |
+    |     |     |     |     |     |     |     |
+    |  -  |  -  |  -  |  -  |  -  |  -  |  -  |
+    |     |     |     |     |     |     |     |
+    |     |     |     |     |     |     |     |
+    |  -  |  -  |  -  |  -  |  -  |  -  |  -  |
+    |     |     |     |     |     |     |     |
+    |     |     |     |     |     |     |     |
+    |  -  |  -  |  -  |  -  |  -  |  -  |  -  |
+    |     |     |     |     |     |     |     |
+    -------------------------------------------
+    |  1  |  2  |  3  |  4  |  5  |  6  |  7  |
+
+        BOARD
+      end
+    end
+
+    context 'when two tokens are dropped (one of each kind) in the first column' do
+      it 'displays a board with two tokens' do
         board.drop_token(Board::LEO_TOKEN, 0)
         board.drop_token(Board::DO_NOT_ENTER_TOKEN, 0)
-        puts
-        puts board.to_s
+        expect { puts(board) }.to output(<<-BOARD).to_stdout
+    |     |     |     |     |     |     |     |
+    |  -  |  -  |  -  |  -  |  -  |  -  |  -  |
+    |     |     |     |     |     |     |     |
+    |     |     |     |     |     |     |     |
+    |  -  |  -  |  -  |  -  |  -  |  -  |  -  |
+    |     |     |     |     |     |     |     |
+    |     |     |     |     |     |     |     |
+    |  -  |  -  |  -  |  -  |  -  |  -  |  -  |
+    |     |     |     |     |     |     |     |
+    |     |     |     |     |     |     |     |
+    |  -  |  -  |  -  |  -  |  -  |  -  |  -  |
+    |     |     |     |     |     |     |     |
+    |     |     |     |     |     |     |     |
+    |  ⛔ |  -  |  -  |  -  |  -  |  -  |  -  |
+    |     |     |     |     |     |     |     |
+    |     |     |     |     |     |     |     |
+    |  ♌ |  -  |  -  |  -  |  -  |  -  |  -  |
+    |     |     |     |     |     |     |     |
+    -------------------------------------------
+    |  1  |  2  |  3  |  4  |  5  |  6  |  7  |
+
+        BOARD
       end
     end
   end

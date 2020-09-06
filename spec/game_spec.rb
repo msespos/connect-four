@@ -38,69 +38,6 @@ RSpec.describe Game do
     end
   end
 
-  describe '#end_of_game_output' do
-    subject(:game) { described_class.new(board_end) }
-    context 'when the game is over with a leo win' do
-      let(:board_end) { instance_double(Board, win_status: :leo) }
-      it 'returns "Leo wins!"' do
-        output = game.end_of_game_output
-        expect(output).to eq('Leo wins!')
-      end
-    end
-
-    context 'when the game is over with a do not enter win' do
-      let(:board_end) { instance_double(Board, win_status: :do_not_enter) }
-      it 'returns "Do Not Enter wins!"' do
-        output = game.end_of_game_output
-        expect(output).to eq('Do Not Enter wins!')
-      end
-    end
-
-    context 'when the game is over with a tie' do
-      let(:board_end) { instance_double(Board, win_status: :no_win_yet) }
-      it 'returns "It\'s a draw!"' do
-        output = game.end_of_game_output
-        expect(output).to eq('It\'s a draw!')
-      end
-    end
-  end
-
-  describe '#game_over?' do
-    subject(:game) { described_class.new(board_over) }
-    context 'when the win status is :leo' do
-      let(:board_over) { instance_double(Board, win_status: :leo) }
-      it 'returns true' do
-        game_over = game.game_over?
-        expect(game_over).to eq(true)
-      end
-    end
-
-    context 'when the win status is :do_not_enter' do
-      let(:board_over) { instance_double(Board, win_status: :do_not_enter) }
-      it 'returns true' do
-        game_over = game.game_over?
-        expect(game_over).to eq(true)
-      end
-    end
-
-    context 'when 42 turns have been played' do
-      let(:board_over) { instance_double(Board, win_status: :no_win_yet) }
-      it 'returns true' do
-        game.instance_variable_set(:@turns, 42)
-        game_over = game.game_over?
-        expect(game_over).to eq(true)
-      end
-    end
-
-    context 'when the win status is :no_win_yet' do
-      let(:board_over) { instance_double(Board, win_status: :no_win_yet) }
-      it 'returns false' do
-        game_over = game.game_over?
-        expect(game_over).to eq(false)
-      end
-    end
-  end
-
   describe '#play_turn' do
     subject(:game_play) { described_class.new(board_play) }
     let(:board_play) { instance_double(Board) }
@@ -111,6 +48,77 @@ RSpec.describe Game do
       end
     end
   end
+
+  describe '#game_over?' do
+    subject(:game) { described_class.new(board_over) }
+    context 'when the win status is :leo' do
+      let(:board_over) { instance_double(Board, win_status: :leo) }
+      xit 'returns true' do
+        game_over = game.game_over?
+        expect(game_over).to eq(true)
+      end
+    end
+
+    context 'when the win status is :do_not_enter' do
+      let(:board_over) { instance_double(Board, win_status: :do_not_enter) }
+      xit 'returns true' do
+        game_over = game.game_over?
+        expect(game_over).to eq(true)
+      end
+    end
+
+    context 'when 42 turns have been played' do
+      let(:board_over) { instance_double(Board, win_status: :no_win_yet) }
+      xit 'returns true' do
+        game.instance_variable_set(:@turns, 42)
+        game_over = game.game_over?
+        expect(game_over).to eq(true)
+      end
+    end
+
+    context 'when the win status is :no_win_yet' do
+      let(:board_over) { instance_double(Board, win_status: :no_win_yet) }
+      xit 'returns false' do
+        game_over = game.game_over?
+        expect(game_over).to eq(false)
+      end
+    end
+  end
+
+  describe '#end_of_game_output' do
+    subject(:game) { described_class.new(board_end) }
+    context 'when the game is over with a leo win' do
+      let(:board_end) { instance_double(Board, win_status: :leo) }
+      xit 'returns "Leo wins!"' do
+        output = game.end_of_game_output
+        expect(output).to eq('Leo wins!')
+      end
+    end
+
+    context 'when the game is over with a do not enter win' do
+      let(:board_end) { instance_double(Board, win_status: :do_not_enter) }
+      xit 'returns "Do Not Enter wins!"' do
+        output = game.end_of_game_output
+        expect(output).to eq('Do Not Enter wins!')
+      end
+    end
+
+    context 'when the game is over with a tie' do
+      let(:board_end) { instance_double(Board, win_status: :no_win_yet) }
+      xit 'returns "It\'s a draw!"' do
+        output = game.end_of_game_output
+        expect(output).to eq('It\'s a draw!')
+      end
+    end
+  end
+
+  # to be written:
+  # describe '#obtain_token' do
+  # context 'when it is Player 1' do
+  # it 'returns a Leo token' do
+  # end
+  # end
+  # end
 end
 
 # rubocop:enable Metrics/BlockLength

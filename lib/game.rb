@@ -8,7 +8,7 @@ class Game
     @player_number = 1
   end
 
-  # play the entire game
+  # play the entire game - tested
   def play_game
     play_turn until game_over?
     puts end_of_game_output
@@ -16,22 +16,22 @@ class Game
 
   private
 
-  # used by #play_game to play one turn
+  # used by #play_game to play one turn - not tested
   def play_turn
     token = obtain_token
     column = obtain_column
     @board.drop_token(token, column - 1)
     @turns += 1
     @player_number = @player_number == 1 ? 2 : 1
-    puts @board.to_s
+    puts @board
   end
 
-  # used by #play_game to determine if the game is over
+  # used by #play_game to determine if the game is over - tested
   def game_over?
     @board.win_status == :leo || @board.win_status == :do_not_enter || @turns == 42
   end
 
-  # used by #play_game to generate the end-of-game output string
+  # used by #play_game to generate the end-of-game output string - tested
   def end_of_game_output
     if @board.win_status == :leo
       'Leo wins!'
@@ -42,12 +42,12 @@ class Game
     end
   end
 
-  # used by #play_turn to get the current token to drop
+  # used by #play_turn to get the current token to drop - not tested
   def obtain_token
     @player_number == 1 ? Board::LEO_TOKEN : Board::DO_NOT_ENTER_TOKEN
   end
 
-  # used by #play_turn to get the current column to drop the token in
+  # used by #play_turn to get the current column to drop the token in - not tested
   def obtain_column
     puts "Player #{@player_number}, pick a column (1-7)"
     column = gets.chomp.to_i
