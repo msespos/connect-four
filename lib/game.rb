@@ -2,10 +2,10 @@
 
 # gameplay class
 class Game
-  def initialize(board = Board.new)
+  def initialize(board = Board.new, turns = 0, player_number = 1)
     @board = board
-    @turns = 0
-    @player_number = 1
+    @turns = turns
+    @player_number = player_number
   end
 
   # play the entire game - tested
@@ -51,6 +51,10 @@ class Game
   def obtain_column
     puts "Player #{@player_number}, pick a column (1-7)"
     column = gets.chomp.to_i
+    obtain_column_loop(column)
+  end
+
+  def obtain_column_loop(column)
     until [1, 2, 3, 4, 5, 6, 7].include?(column) && @board.row_to_use(column - 1) != :error
       puts 'Please enter a valid column number (1-7)'
       column = gets.chomp.to_i
