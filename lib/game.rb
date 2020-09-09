@@ -16,7 +16,7 @@ class Game
 
   private
 
-  # used by #play_game to play one turn - not tested
+  # used by #play_game to play one turn - tested
   def play_turn
     token = obtain_token
     column = obtain_column
@@ -51,14 +51,25 @@ class Game
   def obtain_column
     puts "Player #{@player_number}, pick a column (1-7)"
     column = gets.chomp.to_i
-    obtain_column_loop(column)
+    obtain_column_check(column)
   end
 
-  def obtain_column_loop(column)
-    until [1, 2, 3, 4, 5, 6, 7].include?(column) && @board.row_to_use(column - 1) != :error
+  # used by #obtain_column to check that the given column is valid and prompt if not
+  def obtain_column_check(column)
+    until column_valid_number?(column) && column_not_full?(column)
       puts 'Please enter a valid column number (1-7)'
       column = gets.chomp.to_i
     end
     column
+  end
+
+  # used by #obtain_column_check to verify that a column is a valid number
+  def column_valid_number?(column)
+    [1, 2, 3, 4, 5, 6, 7].include?(column)
+  end
+
+  # used by #obtain_column_check to verify that a column is not already full
+  def column_not_full?(column)
+    @board.row_to_use(column - 1) != nil
   end
 end

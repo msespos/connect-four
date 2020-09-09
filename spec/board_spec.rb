@@ -72,7 +72,7 @@ RSpec.describe Board do
 
   describe '#row_to_use' do
     context 'when the entire first column is full and a token is dropped in the first column' do
-      it 'returns an error message' do
+      it 'returns nil' do
         board.instance_variable_get(:@board)[0][0] = Board::LEO_TOKEN
         board.instance_variable_get(:@board)[0][1] = Board::DO_NOT_ENTER_TOKEN
         board.instance_variable_get(:@board)[0][2] = Board::LEO_TOKEN
@@ -80,7 +80,7 @@ RSpec.describe Board do
         board.instance_variable_get(:@board)[0][4] = Board::LEO_TOKEN
         board.instance_variable_get(:@board)[0][5] = Board::DO_NOT_ENTER_TOKEN
         row_to_use_return = board.row_to_use(0)
-        expect(row_to_use_return).to eq(:error)
+        expect(row_to_use_return).to eq(nil)
       end
     end
 

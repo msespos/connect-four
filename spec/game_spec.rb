@@ -195,13 +195,13 @@ RSpec.describe Game do
       end
     end
 
-    context 'when game_over? is true' do
+    context 'when one turn is played' do
       before do
         allow(game_turn).to receive(:obtain_token).and_return(Board::LEO_TOKEN)
         allow(game_turn).to receive(:obtain_column).and_return(7)
         allow(board_turn).to receive(:drop_token)
         allow(game_turn).to receive(:puts)
-#        allow(board_turn).to receive(:to_s).and_return('The Board')
+        allow(game_turn).to receive(:@board).and_return('The Board')
       end
       xit 'prints the board' do
         expect { game_turn.send(:play_turn) }.to output("The Board\n").to_stdout
@@ -286,6 +286,26 @@ RSpec.describe Game do
       it 'returns a Do Not Enter token' do
         token = game.send(:obtain_token)
         expect(token).to eq(Board::DO_NOT_ENTER_TOKEN)
+      end
+    end
+  end
+
+  describe '#obtain_column' do
+    subject(:game) { described_class.new }
+    context 'when player number is 1' do
+      before do
+        allow(game).to receive(:gets).and_return('1')
+      end
+      it 'prints a prompt' do
+        expect { game.send(:obtain_column) }.to output("Player 1, pick a column (1-7)\n").to_stdout
+        allow(game).to receive(:puts)
+        game.send(:obtain_column)
+      end
+
+      it 'sets column to 1' do
+        expect { game.send(:obtain_column) }.to output("Player 1, pick a column (1-7)\n").to_stdout
+        allow(game).to receive(:puts)
+        game.send(:obtain_column)
       end
     end
   end

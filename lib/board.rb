@@ -24,13 +24,13 @@ class Board
 
   # drop a token into one of the columns on the board, assuming a slot is available - tested
   def drop_token(token, column)
-    return if row_to_use(column) == :error
+    return if row_to_use(column).nil?
 
     @board[column][row_to_use(column)] = token
   end
 
   # used by #drop_token to determine which row, if any, should be used to place a
-  # token given a column - returns an error message if the column is full already
+  # token given a column - returns nil if the column is full already
   # also used by Game#obtain_column to check for full columns - tested
 
   # add column_full? method and move row_to_use to private
@@ -42,7 +42,7 @@ class Board
 
       row += 1
     end
-    :error
+    nil
   end
 
   # determine if the board is in a leo win, do_not_enter win, or no win yet state - tested
