@@ -1,17 +1,13 @@
 # frozen_string_literal: true
 
-# change symbols to NIL as appropriate
-
-# change leo/DNE to P1/P2
-
 # board class
 class Board
   COLUMN_SHIFTS = [1, 0, 1, -1].freeze
   ROW_SHIFTS = [0, 1, -1, -1].freeze
   # make this a hash - pointing to row, column above
   WIN_TYPES = %i[row column negative_slope_diagonal positive_slope_diagonal].freeze
-  LEO_TOKEN = " \u264C".encode('utf-8').freeze
-  DO_NOT_ENTER_TOKEN = " \u26D4".encode('utf-8').freeze
+  PLAYER_ONE_TOKEN = " \u264C".encode('utf-8').freeze
+  PLAYER_TWO_TOKEN = " \u26D4".encode('utf-8').freeze
 
   def initialize
     board
@@ -29,23 +25,12 @@ class Board
     @board[column][row_to_use(column)] = token
   end
 
-  # used by #drop_token to determine which row, if any, should be used to place a
-  # token given a column - returns nil if the column is full already
-  # also used by Game#obtain_column to check for full columns - tested
-
-  # add column_full? method and move row_to_use to private
-
-  def row_to_use(column)
-    row = 0
-    while row < 6
-      return row if @board[column][row] == ' - '
-
-      row += 1
-    end
-    nil
+  # used by Game#obtain_column_check to verify that a column is not already full - tested
+  def column_full?(column)
+    row_to_use(column - 1).nil?
   end
 
-  # determine if the board is in a leo win, do_not_enter win, or no win yet state - tested
+  # determine if the board is in a player_one win, player_two win, or no_win_yet state - tested
   def win_status
     # WIN_TYPES.keys.each
     WIN_TYPES.each do |win_type|
@@ -63,6 +48,19 @@ class Board
 
   private
 
+  # used by #drop_token to determine which row, if any, should be used to place a
+  # token given a column - returns nil if the column is full already
+  # also used by #column_full? to check for full columns - tested
+  def row_to_use(column)
+    row = 0
+    while row < 6
+      return row if @board[column][row] == ' - '
+
+      row += 1
+    end
+    nil
+  end
+
   # used by #win_status to determine the winner if there is a winner at this point in the game - not tested
   def winner_or_none(win_type)
     @board.each_with_index do |column, column_index|
@@ -79,10 +77,10 @@ class Board
 
   # used by #win_status to convert strings from #winner_or_none to their corresponding symbols - not tested
   def win_type_to_symbol(win_type)
-    if win_type == LEO_TOKEN
-      :leo
-    elsif win_type == DO_NOT_ENTER_TOKEN
-      :do_not_enter
+    if win_type == PLAYER_ONE_TOKEN
+      :player_one
+    elsif win_type == PLAYER_TWO_TOKEN
+      :player_two
     else
       :no_win_yet
     end
@@ -129,7 +127,7 @@ class Board
     column_index >= 0 && column_index <= 6 && row_index >= 0 && row_index <= 5
   end
 
-  # used by to_s to draw the main 7x6 board with spaces, tokens and borders
+  # used by to_s to draw the main 7x6 board with spaces, tokens and borders - not tested
   # don't pass in a parameter - just build and return
   def main_board(string)
     (0..5).each do |row|
@@ -143,7 +141,7 @@ class Board
     string
   end
 
-  # used by to_s to draw the bottom section of the board
+  # used by to_s to draw the bottom section of the board - not tested
   # don't pass in a parameter - just build and return
   def bottom_of_board(string)
     string += '    -' + '-' * 42 + "\n" + '    |'
