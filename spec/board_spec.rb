@@ -6,8 +6,17 @@ require_relative '../lib/board.rb'
 
 RSpec.describe Board do
   subject(:board) { Board.new }
-  describe '#board' do
+  describe '#initialize' do
     context 'when the board class is instantiated' do
+      it 'calls the #board method' do
+        expect(board).to receive(:board)
+        board.send(:initialize)
+      end
+    end
+  end
+
+  describe '#board' do
+    context 'when #board is called' do
       it 'generates a 6 row board' do
         expect(board.instance_variable_get(:@board)[0].size).to eq(6)
       end
@@ -130,7 +139,7 @@ RSpec.describe Board do
       end
     end
 
-    context 'when there are four player_one in a column along the left from rows 1 to 4' do
+    context 'when there are four player_ones in a column along the left from rows 1 to 4' do
       it 'returns :player_one' do
         board.instance_variable_get(:@board)[0][0] = Board::PLAYER_ONE_TOKEN
         board.instance_variable_get(:@board)[0][1] = Board::PLAYER_ONE_TOKEN
@@ -143,7 +152,7 @@ RSpec.describe Board do
       end
     end
 
-    context 'when there are four player_two in a column unrealistically placed from rows 4 to 7' do
+    context 'when there are four player_twos in a column unrealistically placed from rows 4 to 7' do
       it 'returns :player_two' do
         board.instance_variable_get(:@board)[5][0] = Board::PLAYER_ONE_TOKEN
         board.instance_variable_get(:@board)[5][1] = Board::PLAYER_TWO_TOKEN
@@ -177,7 +186,7 @@ RSpec.describe Board do
       end
     end
 
-    context 'when there are four Board::player_two in a row diagonally from the top left spot' do
+    context 'when there are four player_twos in a row diagonally from the top left spot' do
       it 'returns :player_two' do
         board.instance_variable_get(:@board)[0][5] = Board::PLAYER_TWO_TOKEN
         board.instance_variable_get(:@board)[1][4] = Board::PLAYER_TWO_TOKEN

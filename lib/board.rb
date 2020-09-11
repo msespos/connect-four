@@ -2,10 +2,12 @@
 
 # board class
 class Board
-  COLUMN_SHIFTS = [1, 0, 1, -1].freeze
-  ROW_SHIFTS = [0, 1, -1, -1].freeze
-  # make this a hash - pointing to row, column above
-  WIN_TYPES = %i[row column negative_slope_diagonal positive_slope_diagonal].freeze
+  SHIFTS_BY_WIN_TYPE = {
+    row: [1, 0],
+    column: [0, 1],
+    negative_slope_diagonal: [1, -1],
+    positive_slope_diagonal: [-1, -1]
+  }.freeze
   PLAYER_ONE_TOKEN = " \u264C".encode('utf-8').freeze
   PLAYER_TWO_TOKEN = " \u26D4".encode('utf-8').freeze
 
@@ -32,18 +34,15 @@ class Board
 
   # determine if the board is in a player_one win, player_two win, or no_win_yet state - tested
   def win_status
-    # WIN_TYPES.keys.each
-    WIN_TYPES.each do |win_type|
-      return win_type_to_symbol(winner_or_none(win_type)) if winner_or_none(win_type) != :no_win_yet
+    SHIFTS_BY_WIN_TYPE.each_key do |win_type|
+      return winner_or_none_symbol(winner_or_none(win_type)) if winner_or_none(win_type) != :no_win_yet
     end
     :no_win_yet
   end
 
   # the string that represents the game board during play - tested
   def to_s
-    string = ''
-    # concatenate the different parts
-    bottom_of_board(main_board(string))
+    main_board + bottom_of_board
   end
 
   private
@@ -76,10 +75,10 @@ class Board
   end
 
   # used by #win_status to convert strings from #winner_or_none to their corresponding symbols - not tested
-  def win_type_to_symbol(win_type)
-    if win_type == PLAYER_ONE_TOKEN
+  def winner_or_none_symbol(winner_or_none)
+    if winner_or_none == PLAYER_ONE_TOKEN
       :player_one
-    elsif win_type == PLAYER_TWO_TOKEN
+    elsif winner_or_none == PLAYER_TWO_TOKEN
       :player_two
     else
       :no_win_yet
@@ -98,7 +97,7 @@ class Board
   # used by #four_consecutive? to create the four spots to be checked using column and row
   # shifts as appropriate to the type of win - not tested
   def win_spots(column_index, row_index, win_type)
-    column_shift, row_shift = shifts(win_type)
+    column_shift, row_shift = SHIFTS_BY_WIN_TYPE[win_type]
     win_spots = []
     (0..3).each do |i|
       return :invalid unless valid_coordinates?(column_index + column_shift * i, row_index + row_shift * i)
@@ -108,20 +107,6 @@ class Board
     win_spots
   end
 
-  # used by #win_spots to generate the appropriate column and row shifts according to win_type
-  # rewrite or remove? becomes a lookup - not tested
-  def shifts(win_type)
-    column_shift = 0
-    row_shift = 0
-    WIN_TYPES.each_with_index do |w_type, index|
-      if w_type == win_type
-        column_shift = COLUMN_SHIFTS[index]
-        row_shift = ROW_SHIFTS[index]
-      end
-    end
-    [column_shift, row_shift]
-  end
-
   # used by #win_spots to determine if the indices being examined are valid coordinates - not tested
   def valid_coordinates?(column_index, row_index)
     column_index >= 0 && column_index <= 6 && row_index >= 0 && row_index <= 5
@@ -129,7 +114,8 @@ class Board
 
   # used by to_s to draw the main 7x6 board with spaces, tokens and borders - not tested
   # don't pass in a parameter - just build and return
-  def main_board(string)
+  def main_board
+    string = ''
     (0..5).each do |row|
       string += '    |' + '     |' * 7 + "\n   "
       (0..6).each do |column|
@@ -143,7 +129,8 @@ class Board
 
   # used by to_s to draw the bottom section of the board - not tested
   # don't pass in a parameter - just build and return
-  def bottom_of_board(string)
+  def bottom_of_board
+    string = ''
     string += '    -' + '-' * 42 + "\n" + '    |'
     (1..7).each { |column_value| string += '  ' + column_value.to_s + '  |' }
     string += "\n\n"
