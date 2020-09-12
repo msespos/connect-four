@@ -35,7 +35,7 @@ class Board
   # determine if the board is in a player_one win, player_two win, or no_win_yet state - tested
   def win_status
     SHIFTS_BY_WIN_TYPE.each_key do |win_type|
-      return winner_or_none_symbol(winner_or_none(win_type)) if winner_or_none(win_type) != :no_win_yet
+      return token_to_symbol(winner_or_none(win_type)) if winner_or_none(win_type) != :no_win_yet
     end
     :no_win_yet
   end
@@ -60,13 +60,13 @@ class Board
     nil
   end
 
-  # used by #win_status to determine the winner if there is a winner at this point in the game - not tested
+  # used by #win_status to determine the winner if there is a winner at this point in the game - tested
   def winner_or_none(win_type)
     @board.each_with_index do |column, column_index|
       column.each_index do |row_index|
         next if @board[column_index][row_index] == ' - '
 
-        next if four_consecutive?(column_index, row_index, win_type) == :invalid
+        next if four_consecutive?(column_index, row_index, win_type).nil?
 
         return @board[column_index][row_index] if four_consecutive?(column_index, row_index, win_type)
       end
@@ -74,8 +74,8 @@ class Board
     :no_win_yet
   end
 
-  # used by #win_status to convert strings from #winner_or_none to their corresponding symbols - not tested
-  def winner_or_none_symbol(winner_or_none)
+  # used by #win_status to convert strings from #winner_or_none to their corresponding symbols - tested
+  def token_to_symbol(winner_or_none)
     if winner_or_none == PLAYER_ONE_TOKEN
       :player_one
     elsif winner_or_none == PLAYER_TWO_TOKEN
@@ -88,7 +88,7 @@ class Board
   # used by #winner_or_none to check four spots given an initial spot to see if they are - not tested
   # consecutive of one color
   def four_consecutive?(column_index, row_index, win_type)
-    return :invalid if win_spots(column_index, row_index, win_type) == :invalid
+    return nil if win_spots(column_index, row_index, win_type).nil?
 
     first_spot, second_spot, third_spot, fourth_spot = win_spots(column_index, row_index, win_type)
     first_spot == second_spot && first_spot == third_spot && first_spot == fourth_spot
@@ -100,7 +100,7 @@ class Board
     column_shift, row_shift = SHIFTS_BY_WIN_TYPE[win_type]
     win_spots = []
     (0..3).each do |i|
-      return :invalid unless valid_coordinates?(column_index + column_shift * i, row_index + row_shift * i)
+      return nil unless valid_coordinates?(column_index + column_shift * i, row_index + row_shift * i)
 
       win_spots[i] = @board[column_index + column_shift * i][row_index + row_shift * i]
     end
