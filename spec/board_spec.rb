@@ -266,6 +266,7 @@ RSpec.describe Board do
     end
   end
 
+  # integration test - tests #main_board and #bottom_of_board as well
   describe '#to_s' do
     context 'when no tokens are dropped' do
       it 'displays a blank board' do
@@ -493,6 +494,50 @@ RSpec.describe Board do
         allow(board).to receive(:win_spots).with(0, 0, :row).and_return(nil)
         four_consecutive_return = board.send(:four_consecutive?, 0, 0, :row)
         expect(four_consecutive_return).to eq(nil)
+      end
+    end
+  end
+
+  # integration test - also checks #valid_coordinates?
+  describe '#win_spots' do
+    context 'when checking a row starting at the bottom left spot' do
+      it 'returns the appropriate array' do
+        return_array = board.send(:win_spots, 0, 0, :row)
+        expect(return_array).to eq([' - ', ' - ', ' - ', ' - '])
+      end
+    end
+    context 'when checking a column starting at the bottom left spot' do
+      it 'returns the appropriate array' do
+        return_array = board.send(:win_spots, 0, 0, :column)
+        expect(return_array).to eq([' - ', ' - ', ' - ', ' - '])
+      end
+    end
+    context 'when checking a positive slope diagonal starting at (4, 4)' do
+      it 'returns the appropriate array' do
+        return_array = board.send(:win_spots, 3, 3, :positive_slope_diagonal)
+        expect(return_array).to eq([' - ', ' - ', ' - ', ' - '])
+      end
+    end
+    context 'when checking a positive slope diagonal starting at (0, 0)' do
+      it 'returns nil' do
+        return_array = board.send(:win_spots, 0, 0, :positive_slope_diagonal)
+        expect(return_array).to eq(nil)
+      end
+    end
+  end
+
+  describe '#valid_coordinates?' do
+    context 'when given valid coordinates' do
+      it 'returns true' do
+        return_valid = board.send(:valid_coordinates?, 0, 0)
+        expect(return_valid).to eq(true)
+      end
+    end
+
+    context 'when given invalid coordinates' do
+      it 'returns false' do
+        return_valid = board.send(:valid_coordinates?, 6, 7)
+        expect(return_valid).to eq(false)
       end
     end
   end

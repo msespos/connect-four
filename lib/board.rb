@@ -15,24 +15,24 @@ class Board
     board
   end
 
-  # build a blank board - tested
+  # build a blank board
   def board
     @board = Array.new(7) { Array.new(6) { ' - ' } }
   end
 
-  # drop a token into one of the columns on the board, assuming a slot is available - tested
+  # drop a token into one of the columns on the board, assuming a slot is available
   def drop_token(token, column)
     return if row_to_use(column).nil?
 
     @board[column][row_to_use(column)] = token
   end
 
-  # used by Game#obtain_column_check to verify that a column is not already full - tested
+  # used by Game#obtain_column_check to verify that a column is not already full
   def column_full?(column)
     row_to_use(column - 1).nil?
   end
 
-  # determine if the board is in a player_one win, player_two win, or no_win_yet state - tested
+  # determine if the board is in a player_one win, player_two win, or no_win_yet state
   def win_status
     SHIFTS_BY_WIN_TYPE.each_key do |win_type|
       return token_to_symbol(winner_or_none(win_type)) if winner_or_none(win_type) != :no_win_yet
@@ -40,7 +40,7 @@ class Board
     :no_win_yet
   end
 
-  # the string that represents the game board during play - tested
+  # the string that represents the game board during play
   def to_s
     main_board + bottom_of_board
   end
@@ -49,7 +49,7 @@ class Board
 
   # used by #drop_token to determine which row, if any, should be used to place a
   # token given a column - returns nil if the column is full already
-  # also used by #column_full? to check for full columns - tested
+  # also used by #column_full? to check for full columns
   def row_to_use(column)
     row = 0
     while row < 6
@@ -60,7 +60,7 @@ class Board
     nil
   end
 
-  # used by #win_status to determine the winner if there is a winner at this point in the game - tested
+  # used by #win_status to determine the winner if there is a winner at this point in the game
   def winner_or_none(win_type)
     @board.each_with_index do |column, column_index|
       column.each_index do |row_index|
@@ -74,7 +74,7 @@ class Board
     :no_win_yet
   end
 
-  # used by #win_status to convert strings from #winner_or_none to their corresponding symbols - tested
+  # used by #win_status to convert strings from #winner_or_none to their corresponding symbols
   def token_to_symbol(winner_or_none)
     if winner_or_none == PLAYER_ONE_TOKEN
       :player_one
@@ -85,7 +85,7 @@ class Board
     end
   end
 
-  # used by #winner_or_none to check four spots given an initial spot to see if they are - not tested
+  # used by #winner_or_none to check four spots given an initial spot to see if they are
   # consecutive of one color
   def four_consecutive?(column_index, row_index, win_type)
     return nil if win_spots(column_index, row_index, win_type).nil?
@@ -95,7 +95,7 @@ class Board
   end
 
   # used by #four_consecutive? to create the four spots to be checked using column and row
-  # shifts as appropriate to the type of win - not tested
+  # shifts as appropriate to the type of win
   def win_spots(column_index, row_index, win_type)
     column_shift, row_shift = SHIFTS_BY_WIN_TYPE[win_type]
     win_spots = []
@@ -107,28 +107,31 @@ class Board
     win_spots
   end
 
-  # used by #win_spots to determine if the indices being examined are valid coordinates - not tested
+  # used by #win_spots to determine if the indices being examined are valid coordinates
   def valid_coordinates?(column_index, row_index)
     column_index >= 0 && column_index <= 6 && row_index >= 0 && row_index <= 5
   end
 
-  # used by to_s to draw the main 7x6 board with spaces, tokens and borders - not tested
-  # don't pass in a parameter - just build and return
+  # used by to_s to draw the main 7x6 board with spaces, tokens and borders
   def main_board
     string = ''
     (0..5).each do |row|
-      string += '    |' + '     |' * 7 + "\n   "
-      (0..6).each do |column|
-        rows = ' | ' + @board[column][5 - row].to_s
-        string += rows
-      end
-      string += " |\n    " + '|     ' * 7 + "|\n"
+      string += rows(row)
     end
     string
   end
 
-  # used by to_s to draw the bottom section of the board - not tested
-  # don't pass in a parameter - just build and return
+  # used by main_board to draw the rows
+  def rows(row)
+    string = ''
+    string += '    |' + '     |' * 7 + "\n   "
+    (0..6).each do |column|
+      string += ' | ' + @board[column][5 - row].to_s
+    end
+    string += " |\n    " + '|     ' * 7 + "|\n"
+  end
+
+  # used by to_s to draw the bottom section of the board
   def bottom_of_board
     string = ''
     string += '    -' + '-' * 42 + "\n" + '    |'
